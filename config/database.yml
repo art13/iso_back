@@ -1,0 +1,26 @@
+
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: isolux
+  host: localhost
+  port: 5432
+  pool: 5
+  username: deployer  
+  password: deployer
+
+# test:
+#   adapter: postgresql
+#   encoding: unicode
+#   database: isolux_test
+#   pool: 5
+#   username: isolux
+#   password:
+
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: isolux
+  pool: 5
+  username: isolux
+  password:
