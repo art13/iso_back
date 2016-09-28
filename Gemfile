@@ -8,7 +8,7 @@ gem 'rails', '>= 5.0.0.rc2', '< 5.1'
 gem 'pg'
 gem 'paperclip'
 gem 'nokogiri'
-
+gem 'kaminari'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
