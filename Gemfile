@@ -6,6 +6,7 @@ gem 'rails', '>= 5.0.0.rc2', '< 5.1'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'pg'
+gem 'unirest'
 gem 'paperclip'
 gem 'nokogiri'
 gem 'kaminari'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160927150301) do
+ActiveRecord::Schema.define(version: 20160929145443) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,13 +21,22 @@ ActiveRecord::Schema.define(version: 20160927150301) do
     t.string   "url",                default: ""
     t.string   "permalink",          default: ""
     t.string   "icon_type",          default: ""
-    t.integer  "time_id"
+    t.string   "time_id"
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string  "name"
+    t.string  "name_t"
+    t.string  "pics"
+    t.string  "time_id"
+    t.integer "category_id"
+    t.jsonb   "properties",  default: {}
   end
 
 end

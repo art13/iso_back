@@ -6,7 +6,7 @@ class CreateTableCategories < ActiveRecord::Migration[5.0]
     	t.string :url, :default => ""
     	t.string :permalink, :default => ""
     	t.string :icon_type, :default => ""
-    	t.integer :time_id
+    	t.string :time_id
     	t.attachment :image
     	t.timestamps
     end
