@@ -31,12 +31,15 @@ ActiveRecord::Schema.define(version: 20160929145443) do
   end
 
   create_table "products", force: :cascade do |t|
-    t.string  "name"
-    t.string  "name_t"
-    t.string  "pics"
-    t.string  "time_id"
-    t.integer "category_id"
-    t.jsonb   "properties",  default: {}
+    t.string   "name"
+    t.string   "name_t"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.integer  "photo_file_size"
+    t.datetime "photo_updated_at"
+    t.string   "time_id"
+    t.integer  "category_id"
+    t.jsonb    "properties",         default: {}
   end
 
 end

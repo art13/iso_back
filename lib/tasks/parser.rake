@@ -43,7 +43,7 @@ task :parse_categories => :environment do
  	#@categories_array = Category.where(:parent_id => 0).first.children.map{|c| [c.parent.permalink, c.permalink]}
  	# puts "#{@categories_array}"
  		@categories_array = parent.children.map{|c| [parent.permalink, c.permalink]}
- 		parse_products(@categories_array)
+ 		parse_products(@categories_array, parent.name)
  	end
 end
 
@@ -55,9 +55,10 @@ def compile(page, parent)
 	page.css(".categoryNavig ul li a").map{|a| {:permalink => clear_permalink(a['href'].split('/').last,), :name => a.text, :parent_id => parent.id, :time_id =>time_id_generation(clear_permalink(a['href'].split('/').last,), parent.permalink)}}
 end
 
-def parse_products(categories_array)
+def parse_products(categories_array, parent)
 	links = []
 	@products = []
+	@categories = Category.all
 	categories_array.each do |uri_arr|
 	    print "Парсинг категории " + uri_arr.join("/") + "..."
 	    itms = get_items_links(uri_arr)
@@ -71,9 +72,9 @@ def parse_products(categories_array)
 	num = 0
 	links.each do |link|
 	    num += 1
-	    print "Парсинг, #{num*100 / links.length} % завершено \r"
+	    print "Парсинг категории #{parent}, #{num*100 / links.length} % завершено \r"
 	    #@products << parse_item(link)
-	    parse_item(link)
+	    parse_item(link, @categories)
 	end
 
 	puts "Все товары добавлены в базу данных"
@@ -116,14 +117,14 @@ def open_uri(uri)
 end
 
 def time_id_generation(permalink, parent_permalink)
-	Digest::MD5.hexdigest(parent_permalink + permalink)
+	product_time_id(parent_permalink + permalink)
 end
 
 def product_time_id(name)
 	Digest::MD5.hexdigest(name)
 end
 
-def parse_item(uri)
+def parse_item(uri, categories)
 		@products = []
 		doc = open_uri(uri)
 		out = {}
@@ -133,28 +134,10 @@ def parse_item(uri)
 		out[:time_id] = product_time_id(out[:name_t])
 		
 		picc = doc.css('.slickslider a')
-		out[:pics] = picc.length==0 ? "" : picc[0]['href']
-		raw_cat = doc.css('ol.isolux-breadcrumb li')[-2].inner_text.strip
-		puts "------- #{raw_cat} ---------"
-		# Substitute category
-		# subc = rest_search('substs', raw_cat)
+		out[:photo] = picc.length==0 ? "" : URI.parse(picc[0]['href'].split("?").first)
+		category_tray = categories.find_by_time_id(get_category_id(doc))
+		out[:category_id] = category_tray.nil? ? categories.find_by_time_id(get_category_id(doc, -3)).id : category_tray.id 
 
-		# unless subc.empty? then
-		# 	scat = subc.first['id']
-		# end 
-		
-		# if scat.nil? then
-		# 	subc = rest_search('categories', raw_cat)
-			
-		# 	if subc.empty?
-		# 		rxc = rest_add('categories', {:name => raw_cat})
-		# 		scat = rxc['id']
-		# 	else
-		# 		scat = subc.first['id']
-		# 	end
-		# end
-		
-		out[:category_id] = Category.first.id
 		props = []
 		
 		doc.css('#tabmenu-attributes table tr').each do |x| 
@@ -168,8 +151,9 @@ def parse_item(uri)
 		out[:properties] = props.uniq.to_json
 		#out[:brand_id] = out[:properties]["Бренд"]
 		out
-		puts "#{out}"
-		Product.find_by_time_id(out[:time_id]) || Product.create(out)
+		puts "#{out[:name]}"
+		@current_product = Product.find_by_time_id(out[:time_id]) 
+		@current_product ? @current_product.update_attributes(out) : Product.create(out)
 end
 
 def rest_get(zone, id=nil)
@@ -186,4 +170,12 @@ def build_rest_uri(zone, id=nil)
 		uri += (id.nil?) ? "" : "/#{id}"
 		uri += ".json"
 		uri
+end
+
+def get_category_id(doc, step=-2)
+	raw_cat = doc.css('ol.isolux-breadcrumb li')[step].css("a").attr("href").text
+	puts "------- #{raw_cat} ---------"
+	cat_link = raw_cat.split(".html").first.split("/").last(2).join
+	puts cat_link
+	product_time_id(cat_link)
 end
