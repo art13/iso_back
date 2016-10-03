@@ -14,7 +14,6 @@ task :parse_categories => :environment do
  	@heads.each do |head|
  		puts "== start parse #{head[:name]} =="
  		@page = open_uri(@base_uri + "/" + head[:permalink])
-
  		@parent_category = Category.find_by_name(head[:name]) || 
  							Category.create(:name => head[:name], :permalink => clear_permalink(head[:permalink]), :time_id => time_id_generation(clear_permalink(head[:permalink]),""))
  		unless @parent_category.nil?
@@ -40,9 +39,9 @@ task :parse_categories => :environment do
  		puts "== end =="
  	end
  	Category.where(:parent_id => 0).each do |parent|
- 	#@categories_array = Category.where(:parent_id => 0).first.children.map{|c| [c.parent.permalink, c.permalink]}
- 	# puts "#{@categories_array}"
- 		@categories_array = parent.children.map{|c| [parent.permalink, c.permalink]}
+ 	@categories_array = Category.where(:parent_id => 0).last.children.map{|c| [c.parent.permalink, c.permalink]}
+ 		puts "#{@categories_array}"
+ 		#@categories_array = parent.children.map{|c| [parent.permalink, c.permalink]}
  		parse_products(@categories_array, parent.name)
  	end
 end
@@ -70,15 +69,16 @@ def parse_products(categories_array, parent)
 
 	puts "Начало парсинга товаров"
 	num = 0
+	@new_products = []
 	links.each do |link|
 	    num += 1
 	    print "Парсинг категории #{parent}, #{num*100 / links.length} % завершено \r"
 	    #@products << parse_item(link)
-	    parse_item(link, @categories)
+	    parse_item(link, @categories, @new_products)
 	end
-
-	puts "Все товары добавлены в базу данных"
-	puts "-- Парсинг завершён --"
+	Product.create(@new_products)
+	puts "товары  добавлены в базу данных"
+	puts "-- Парсинг категории #{parent} завершён --"
 end
 
 def build_uri(uri_array, page=nil)
@@ -124,13 +124,15 @@ def product_time_id(name)
 	Digest::MD5.hexdigest(name)
 end
 
-def parse_item(uri, categories)
+def parse_item(uri, categories, new_products)
+		
+		@update_products = []
 		@products = []
 		doc = open_uri(uri)
 		out = {}
 		
 		out[:name] = doc.css('.isolux-product-page-title h1 span').inner_text.strip
-		out[:name_t] = uri.split("/")[3].split(".")[0].gsub("-"," ")
+		out[:name_t] = uri.split("/")[3].split(".")[0].gsub("-","_")
 		out[:time_id] = product_time_id(out[:name_t])
 		
 		picc = doc.css('.slickslider a')
@@ -151,9 +153,11 @@ def parse_item(uri, categories)
 		out[:properties] = props.uniq.to_json
 		#out[:brand_id] = out[:properties]["Бренд"]
 		out
-		puts "#{out[:name]}"
-		@current_product = Product.find_by_time_id(out[:time_id]) 
-		@current_product ? @current_product.update_attributes(out) : Product.create(out)
+		puts "#{out}"
+		@current_product = Product.find_by_time_id(out[:time_id])
+		puts "#{@current_product}" 
+		@current_product.nil? ? new_products << out : @current_product.update_attributes(out)
+		puts "#{new_products.size}"
 end
 
 def rest_get(zone, id=nil)
@@ -179,3 +183,4 @@ def get_category_id(doc, step=-2)
 	puts cat_link
 	product_time_id(cat_link)
 end
+
