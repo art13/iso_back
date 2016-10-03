@@ -137,9 +137,12 @@ def parse_item(uri, categories, new_products)
 		
 		picc = doc.css('.slickslider a')
 		out[:photo] = picc.length==0 ? "" : URI.parse(picc[0]['href'].split("?").first)
-		category_tray = categories.find_by_time_id(get_category_id(doc))
-		out[:category_id] = category_tray.nil? ? categories.find_by_time_id(get_category_id(doc, -3)).id : category_tray.id 
-
+		begin
+			category_tray = categories.find_by_time_id(get_category_id(doc))
+			out[:category_id] = category_tray.nil? ? categories.find_by_time_id(get_category_id(doc, -3)).id : category_tray.id 
+		rescue
+			out[:category_id] = categories.first.id
+		end
 		props = []
 		
 		doc.css('#tabmenu-attributes table tr').each do |x| 
