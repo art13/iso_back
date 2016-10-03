@@ -19,12 +19,18 @@ module Api
 		end
 
 		def show
-			product = Product.find_by_name_t(params[:id])
+			product = 
+				case params[:id].to_i > 0
+				when true
+					Product.find_by_id(params[:id])
+				when false
+					Product.find_by_permalink(params[:id])
+				end
 			render :json => asjson(product)
 		end
 
 		def asjson(product)
-			product.as_json(:only => [:id, :category_id, :name, :properties, :updated_at], :methods => [:photo_url, :permalink])
+			product.as_json(:only => [:id, :category_id, :permalink, :name, :updated_at], :methods => [:photo_url, :product_properties])
 		end
 	end
 

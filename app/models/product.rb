@@ -14,14 +14,14 @@ class Product < ActiveRecord::Base
     	self.photo.url.split("?").first
     end
 
-    def permalink
-    	self.name_t	
-    end
-
     def to_param
-    	name_t
+    	permalink
     end
 
+    def product_properties
+    	JSON.parse(self.properties)
+    end
+	
 	private
 	
 		def destroy_photo?

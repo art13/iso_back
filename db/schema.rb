@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20160929145443) do
     t.integer  "parent_id",          default: 0
     t.string   "url",                default: ""
     t.string   "permalink",          default: ""
+    t.string   "site_permalink",     default: ""
     t.string   "icon_type",          default: ""
     t.string   "time_id"
     t.string   "image_file_name"
@@ -32,7 +33,7 @@ ActiveRecord::Schema.define(version: 20160929145443) do
 
   create_table "products", force: :cascade do |t|
     t.string   "name"
-    t.string   "name_t"
+    t.string   "permalink"
     t.string   "photo_file_name"
     t.string   "photo_content_type"
     t.integer  "photo_file_size"
@@ -40,6 +41,8 @@ ActiveRecord::Schema.define(version: 20160929145443) do
     t.string   "time_id"
     t.integer  "category_id"
     t.jsonb    "properties",         default: {}
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
 
 end

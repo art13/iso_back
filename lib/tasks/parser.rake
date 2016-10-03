@@ -15,7 +15,7 @@ task :parse_categories => :environment do
  		puts "== start parse #{head[:name]} =="
  		@page = open_uri(@base_uri + "/" + head[:permalink])
  		@parent_category = Category.find_by_name(head[:name]) || 
- 							Category.create(:name => head[:name], :permalink => clear_permalink(head[:permalink]), :time_id => time_id_generation(clear_permalink(head[:permalink]),""))
+ 							Category.create(:name => head[:name], :site_permalink => clear_permalink(head[:permalink]), :time_id => time_id_generation(clear_permalink(head[:permalink]),""))
  		unless @parent_category.nil?
  			second_round = compile(@page, @parent_category)
  			puts "#{second_round}"
@@ -23,7 +23,7 @@ task :parse_categories => :environment do
  				puts "#{second}"
  				if second[:name] != "Товары по акции"	
 	 				second_category = Category.find_by_time_id(second[:time_id]) || Category.create(second)
-	 				pager = @base_uri + "/" + clear_permalink(head[:permalink])+ "/" + second[:permalink] + ".html"
+	 				pager = @base_uri + "/" + clear_permalink(head[:permalink])+ "/" + second[:site_permalink] + ".html"
 	 				puts "#{pager}"
 	 				third_round = compile(open_uri(open(pager)), second_category)
 	 				puts "third round"
@@ -39,9 +39,9 @@ task :parse_categories => :environment do
  		puts "== end =="
  	end
  	Category.where(:parent_id => 0).each do |parent|
- 	@categories_array = Category.where(:parent_id => 0).last.children.map{|c| [c.parent.permalink, c.permalink]}
+ 	#@categories_array = Category.where(:parent_id => 0).last.children.map{|c| [c.parent.site_permalink, c.site_permalink]}
+ 		@categories_array = parent.children.map{|c| [parent.permalink, c.permalink]}
  		puts "#{@categories_array}"
- 		#@categories_array = parent.children.map{|c| [parent.permalink, c.permalink]}
  		parse_products(@categories_array, parent.name)
  	end
 end
@@ -51,7 +51,7 @@ def clear_permalink(permalink)
 end
 
 def compile(page, parent)
-	page.css(".categoryNavig ul li a").map{|a| {:permalink => clear_permalink(a['href'].split('/').last,), :name => a.text, :parent_id => parent.id, :time_id =>time_id_generation(clear_permalink(a['href'].split('/').last,), parent.permalink)}}
+	page.css(".categoryNavig ul li a").map{|a| {:site_permalink => clear_permalink(a['href'].split('/').last), :name => a.text, :parent_id => parent.id, :time_id =>time_id_generation(clear_permalink(a['href'].split('/').last,), parent.site_permalink)}}
 end
 
 def parse_products(categories_array, parent)
@@ -132,8 +132,8 @@ def parse_item(uri, categories, new_products)
 		out = {}
 		
 		out[:name] = doc.css('.isolux-product-page-title h1 span').inner_text.strip
-		out[:name_t] = uri.split("/")[3].split(".")[0].gsub("-","_")
-		out[:time_id] = product_time_id(out[:name_t])
+		out[:permalink] = uri.split("/")[3].split(".")[0].gsub("-","_")
+		out[:time_id] = product_time_id(out[:permalink])
 		
 		picc = doc.css('.slickslider a')
 		out[:photo] = picc.length==0 ? "" : URI.parse(picc[0]['href'].split("?").first)
@@ -144,8 +144,8 @@ def parse_item(uri, categories, new_products)
 		
 		doc.css('#tabmenu-attributes table tr').each do |x| 
 		    o = {}
-		    o['key'] = x.css('td')[0].inner_text.strip
-		    o['val'] = x.css('td')[1].inner_text.strip
+		    o[:key] = x.css('td')[0].inner_text.strip
+		    o[:val] = x.css('td')[1].inner_text.strip
 		
 		    props.push o
 		end

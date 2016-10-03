@@ -5,6 +5,7 @@ class CreateTableCategories < ActiveRecord::Migration[5.0]
     	t.integer :parent_id, :default => 0
     	t.string :url, :default => ""
     	t.string :permalink, :default => ""
+        t.string :site_permalink, :default => ""
     	t.string :icon_type, :default => ""
     	t.string :time_id
     	t.attachment :image
