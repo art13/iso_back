@@ -74,7 +74,7 @@ def parse_products(categories_array, parent)
 	    num += 1
 	    print "Парсинг категории #{parent}, #{num*100 / links.length} % завершено \r"
 	    #@products << parse_item(link)
-	    Thread.new 
+	    # Thread.new 
 	    parse_item(link, @categories, @new_products) # thread
 	end
 	Product.create(@new_products) # thread
