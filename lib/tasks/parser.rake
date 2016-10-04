@@ -40,7 +40,7 @@ task :parse_categories => :environment do
  	end
  	Category.where(:parent_id => 0).each do |parent|
  	#@categories_array = Category.where(:parent_id => 0).last.children.map{|c| [c.parent.site_permalink, c.site_permalink]}
- 		@categories_array = parent.children.map{|c| [parent.permalink, c.permalink]}
+ 		@categories_array = parent.children.map{|c| [parent.site_permalink, c.site_permalink]}
  		puts "#{@categories_array}"
  		parse_products(@categories_array, parent.name)
  	end
@@ -74,9 +74,10 @@ def parse_products(categories_array, parent)
 	    num += 1
 	    print "Парсинг категории #{parent}, #{num*100 / links.length} % завершено \r"
 	    #@products << parse_item(link)
-	    parse_item(link, @categories, @new_products)
+	    Thread.new 
+	    parse_item(link, @categories, @new_products) # thread
 	end
-	Product.create(@new_products)
+	Product.create(@new_products) # thread
 	puts "товары  добавлены в базу данных"
 	puts "-- Парсинг категории #{parent} завершён --"
 end
@@ -89,7 +90,7 @@ def build_uri(uri_array, page=nil)
 end
 
 def get_max_page(uri_array)
-	doc = open_uri build_uri(uri_array, 500)
+	doc = open_uri(build_uri(uri_array, 500))
 	pg = doc.css('.isolux-pagination li a')
 	pg.length===0 ? 1 : pg.last.inner_text.to_i
 end	
@@ -141,7 +142,9 @@ def parse_item(uri, categories, new_products)
 			category_tray = categories.find_by_time_id(get_category_id(doc))
 			out[:category_id] = category_tray.nil? ? categories.find_by_time_id(get_category_id(doc, -3)).id : category_tray.id 
 		rescue
-			out[:category_id] = categories.first.id
+			out[:category_id] =  new_products.last[:category_id]
+			puts "#{get_category_id(doc)}"
+			puts "#{get_category_id(doc, -3)}"
 		end
 		props = []
 		

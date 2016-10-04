@@ -8,7 +8,7 @@ module Api
 			if params[:in_category]
 				Product.where(:category_id => params[:in_category].to_i)
 			else
-				Product.all
+				Product.find_each(:batch_size => 500)
 			end
 			@products = asjson(@products)
 			max_count = @products.size
