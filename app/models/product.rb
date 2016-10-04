@@ -29,10 +29,11 @@ class Product < ActiveRecord::Base
 	def product_categories
 		categories = []
 		category = self.category
-		until category.parent_id == 0
+		while category.parent_id > 0
 			categories << {:name => category.name, :permalink => category.permalink}
 			category = category.parent	
 		end		
+		categories << {:name => category.name, :permalink => category.permalink}
 		categories.reverse
 	end
 

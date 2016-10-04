@@ -124,7 +124,11 @@ def starting_parse_items(links, categories)
 	    num += 1
 	    print "Парсинг категории , #{num*100 / links.length} % завершено \r"
 	    #@products << parse_item(link)
-		parse_item(link, @categories, @new_products) # thread
+	    begin
+			parse_item(link, @categories, @new_products) # thread
+		rescue => e
+			puts "error #{e}"
+		end
 	end
 	Product.create(@new_products)	
 end
