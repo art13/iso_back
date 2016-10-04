@@ -6,11 +6,10 @@ module Api
 			
 			@products =
 			if params[:in_category]
-				Product.where(:category_id => params[:in_category].to_i)
+				asjson_filter(Product.where(:category_id => params[:in_category].to_i))
 			else
-				Product.find_each(:batch_size => 500)
+				asjson(Product.find_each(:batch_size => 500))
 			end
-			@products = asjson(@products)
 			max_count = @products.size
 			@products = Kaminari.paginate_array(@products).page(params[:page]).per(params[:per_page])
 			@count = @products.size
@@ -26,12 +25,17 @@ module Api
 				when false
 					Product.find_by_permalink(params[:id])
 				end
-			render :json => asjson(product)
+			render :json => product.as_json(:only => [:id, :category_id, :permalink, :name, :updated_at], :methods => [:description, :photo_url, :product_properties, :sample_products, :comments]) 
 		end
 
 		def asjson(product)
 			product.as_json(:only => [:id, :category_id, :permalink, :name, :updated_at], :methods => [:photo_url, :product_properties])
 		end
+
+		def asjson_filter(product)
+			product.as_json(:only => [:id, :name, :permalink, :name, :updated_at], :methods => [:photo_url, :code, :product_categories, :rating])
+		end
+
 	end
 
 end

@@ -59,26 +59,17 @@ def parse_products(categories_array, parent)
 	@products = []
 	@categories = Category.all
 	categories_array.each do |uri_arr|
-	    print "Парсинг категории " + uri_arr.join("/") + "..."
+	    print "Парсинг категории " + uri_arr.join("/") + " ..."
 	    itms = get_items_links(uri_arr)
-	    puts "#{itms}"
-	    links.concat itms
-	    puts itms.length.to_s + ' товаров'
-	end
-	puts "Подготовлено к парсингу #{links.length} товаров."
+	    # puts "#{itms}"
+	    # links.concat itms
+	    #puts itms.length.to_s + ' товаров'
+	    puts "Подготовлено к парсингу #{links.length} товаров."
 
-	puts "Начало парсинга товаров"
-	num = 0
-	@new_products = []
-	links.each do |link|
-	    num += 1
-	    print "Парсинг категории #{parent}, #{num*100 / links.length} % завершено \r"
-	    #@products << parse_item(link)
-	    # Thread.new 
-	    parse_item(link, @categories, @new_products) # thread
+		starting_parse_items(itms, @categories)
+
+	    puts "товары  добавлены в базу данных"
 	end
-	Product.create(@new_products) # thread
-	puts "товары  добавлены в базу данных"
 	puts "-- Парсинг категории #{parent} завершён --"
 end
 
@@ -123,6 +114,19 @@ end
 
 def product_time_id(name)
 	Digest::MD5.hexdigest(name)
+end
+
+def starting_parse_items(links, categories)
+	puts "Начало парсинга товаров"
+	num = 0
+	@new_products = []
+	links.each  do |link|
+	    num += 1
+	    print "Парсинг категории , #{num*100 / links.length} % завершено \r"
+	    #@products << parse_item(link)
+		parse_item(link, @categories, @new_products) # thread
+	end
+	Product.create(@new_products)	
 end
 
 def parse_item(uri, categories, new_products)
