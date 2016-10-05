@@ -3,7 +3,8 @@ class Product < ActiveRecord::Base
 	before_destroy :destroy_photo
 
 	belongs_to :category
-
+	has_many :ratings
+	has_many :comments
 	has_attached_file :photo,
 		url: '/products/:id/:style/:basename.:extension',
 	    path: ':rails_root/public/products/:id/:style/:basename.:extension',
@@ -37,9 +38,9 @@ class Product < ActiveRecord::Base
 		categories.reverse
 	end
 
-	# def rating
-	# 	rand(1.0..5.0).round(1)
-	# end
+	def rating
+		rand(1.0..5.0).round(1)
+	end
 
 	def sample_products
 		(self.category.products.to_a - [self]).first(8).pluck(:id)

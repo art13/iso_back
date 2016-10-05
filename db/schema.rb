@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161005065312) do
+ActiveRecord::Schema.define(version: 20161005092701) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,14 @@ ActiveRecord::Schema.define(version: 20161005065312) do
     t.datetime "updated_at",                      null: false
   end
 
+  create_table "comments", force: :cascade do |t|
+    t.string   "autor"
+    t.integer  "product_id"
+    t.text     "comment",    default: ""
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
   create_table "products", force: :cascade do |t|
     t.string   "name"
     t.string   "permalink"
@@ -46,8 +54,13 @@ ActiveRecord::Schema.define(version: 20161005065312) do
     t.string   "code",               default: ""
     t.text     "description",        default: ""
     t.decimal  "price",              default: "0.0"
-    t.decimal  "rating",             default: "4.5"
     t.jsonb    "sample_products",    default: {}
+  end
+
+  create_table "ratings", force: :cascade do |t|
+    t.integer "product_id"
+    t.integer "comment_id"
+    t.decimal "rating",     default: "4.5"
   end
 
 end

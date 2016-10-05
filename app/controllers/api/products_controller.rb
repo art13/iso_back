@@ -26,11 +26,11 @@ module Api
 				when false
 					Product.find_by_permalink(params[:id])
 				end
-			render :json => product.as_json(:only => [:id, :category_id, :permalink, :name, :price, :code, :description, :updated_at], :methods => [:photo_url, :product_properties, :sample_products, :comments, :more_images]) 
+			render :json => product.as_json(:only => [:id, :category_id, :permalink, :name, :price, :code, :description, :updated_at], :methods => [:rating, :photo_url, :product_properties, :sample_products, :comments, :more_images]) 
 		end
 
 		def asjson(product)
-			product.as_json(:only => [:id, :category_id, :permalink, :name, :price, :code, :updated_at], :methods => [:photo_url, :product_properties])
+			product.as_json(:only => [:id, :category_id, :permalink, :name, :price, :code, :updated_at], :methods => [:photo_url, :product_properties, :rating])
 		end
 
 		def asjson_filter(product)
