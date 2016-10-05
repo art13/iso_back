@@ -163,8 +163,11 @@ def parse_item(uri, categories, new_products)
 		
 		    props.push o
 		end
-		
+		out[:code] = doc.css("span.isolux-product-page-sku-number").inner_text
+		out[:price] = doc.css(".prices-block .more-than-40 .cur-price").inner_text.gsub(" ", "").to_f
+		out[:description] = doc.css("#tabmenu-description div div p").map{|x| "<p>#{x.text.strip}</p>" unless x.text.blank?}.join
 		out[:properties] = props.uniq.to_json
+		out[:rating] = rand(1.0..5.0).round(1)
 		#out[:brand_id] = out[:properties]["Бренд"]
 		out
 		puts "#{out}"
