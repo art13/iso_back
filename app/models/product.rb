@@ -3,8 +3,9 @@ class Product < ActiveRecord::Base
 	before_destroy :destroy_photo
 
 	belongs_to :category
-	has_many :ratings
-	has_many :comments
+	has_many :ratings, dependent: :destroy
+	has_many :comments, dependent: :destroy
+	has_many :images, dependent: :destroy
 	has_attached_file :photo,
 		url: '/products/:id/:style/:basename.:extension',
 	    path: ':rails_root/public/products/:id/:style/:basename.:extension',
