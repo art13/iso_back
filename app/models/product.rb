@@ -63,7 +63,7 @@ class Product < ActiveRecord::Base
 	end	
 
 	def more_images
-		[self.photo_url, self.photo_url, self.photo_url]	
+		[self.images.map{|i| i.file.url.split("?").first}]	
 	end
 
 	private

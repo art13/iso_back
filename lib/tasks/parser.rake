@@ -120,25 +120,29 @@ def starting_parse_items(links, categories)
 	puts "Начало парсинга товаров"
 	num = 0
 	@new_products = []
+	@images = []
 	links.each  do |link|
 	    num += 1
 	    print "Парсинг категории , #{num*100 / links.length} % завершено \r"
 	    #@products << parse_item(link)
 	    begin
-			parse_item(link, @categories, @new_products) # thread
+			parse_item(link, @categories, @new_products, @images) # thread
 		rescue => e
 			puts "error #{e}"
 		end
 	end
 	Product.create(@new_products)	
+	Image.create(@images.map{|i| {:product_id => Product.find_by_permalink(i[:product].id), :file => i[:image] }})
+
 end
 
-def parse_item(uri, categories, new_products)
+def parse_item(uri, categories, new_products, new_images)
 		
 		@update_products = []
 		@products = []
 		doc = open_uri(uri)
 		out = {}
+		@images = []
 		
 		out[:name] = doc.css('.isolux-product-page-title h1 span').inner_text.strip
 		out[:permalink] = uri.split("/")[3].split(".")[0].gsub("-","_")
@@ -167,13 +171,30 @@ def parse_item(uri, categories, new_products)
 		out[:price] = doc.css(".prices-block .more-than-40 .cur-price").inner_text.gsub(" ", "").to_f
 		out[:description] = doc.css("#tabmenu-description div div p").map{|x| "<p>#{x.text.strip}</p>" unless x.text.blank?}.join
 		out[:properties] = props.uniq.to_json
-		#out[:rating][] = rand(1.0..5.0).round(1)
-		#out[:brand_id] = out[:properties]["Бренд"]
-		out
+		imgs = doc.css(".isolux-product-page-slider .slickslider .slide img").map{|a| a.attr("src").split("?").first}.uniq
+		imgs.shift
+		puts "==== #{imgs} ---"
+		Array(imgs).each do |i|
+			begin
+				@images << {:image => URI.parse(i), :product => out[:permalink]}
+			rescue Exception => e
+				e
+			end
+		end
 		puts "#{out}"
+		puts "#{@images}"
 		@current_product = Product.find_by_time_id(out[:time_id])
 		puts "#{@current_product}" 
-		@current_product.nil? ? new_products << out : @current_product.update_attributes(out)
+		if @current_product.nil?  
+			new_products << out 
+			new_images << @images
+		else
+		 	@current_product.update_attributes(out)
+		 	unless @images.empty?
+			 	@current_product.images.destroy_all
+			 	@current_product.images.create(@images.map{|i| {:file => i[:image]}})
+			end
+		end
 		puts "#{new_products.size}"
 end
 
