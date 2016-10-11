@@ -14,7 +14,7 @@ task :parse_categories => :environment do
  	@heads.each do |head|
  		puts "== start parse #{head[:name]} =="
  		@page = open_uri(@base_uri + "/" + head[:permalink])
- 		@parent_category = Category.find_by_name(head[:name]) || 
+ 		@parent_category = Category.find_by_site_permalink(clear_permalink(head[:permalink])) || 
  							Category.create(:name => head[:name], :site_permalink => clear_permalink(head[:permalink]), :time_id => time_id_generation(clear_permalink(head[:permalink]),""))
  		unless @parent_category.nil?
  			second_round = compile(@page, @parent_category)
@@ -38,14 +38,16 @@ task :parse_categories => :environment do
  		end
  		puts "== end =="
  	end
- 	Category.where(:parent_id => 0).each do |parent|
+ 	@all_products = 0
+ 	Category.where(:parent_id => 0).each do |parent|	
  	#@categories_array = Category.where(:parent_id => 0).last.children.map{|c| [c.parent.site_permalink, c.site_permalink]}
  		@categories_array = parent.children.map{|c| [parent.site_permalink, c.site_permalink]}
  		puts "#{@categories_array}"
- 		parse_products(@categories_array, parent.name)
+ 		parse_products(@categories_array, parent.name, @all_products)
  	end
+ 	puts "#{@all_products}"
 end
-
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																															
 def clear_permalink(permalink)
 	permalink.split(".").first
 end
@@ -54,7 +56,7 @@ def compile(page, parent)
 	page.css(".categoryNavig ul li a").map{|a| {:site_permalink => clear_permalink(a['href'].split('/').last), :name => a.text, :parent_id => parent.id, :time_id =>time_id_generation(clear_permalink(a['href'].split('/').last,), parent.site_permalink)}}
 end
 
-def parse_products(categories_array, parent)
+def parse_products(categories_array, parent, all_products)
 	links = []
 	@products = []
 	@categories = Category.all
@@ -62,8 +64,10 @@ def parse_products(categories_array, parent)
 	    print "Парсинг категории " + uri_arr.join("/") + " ..."
 	    itms = get_items_links(uri_arr)
 	    # puts "#{itms}"
-	    # links.concat itms
-	    #puts itms.length.to_s + ' товаров'
+	    #links.concat itms
+	    all_products += itms.length.to_i
+	    puts all_products
+	    puts itms.length.to_s + ' товаров'
 	    puts "Подготовлено к парсингу #{links.length} товаров."
 
 		starting_parse_items(itms, @categories)
