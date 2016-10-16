@@ -17,6 +17,7 @@ ActiveRecord::Schema.define(version: 20161005095624) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",               default: ""
+    t.integer  "shop_id",            default: 0
     t.integer  "parent_id",          default: 0
     t.string   "url",                default: ""
     t.string   "permalink",          default: ""
@@ -60,12 +61,12 @@ ActiveRecord::Schema.define(version: 20161005095624) do
     t.string   "time_id"
     t.integer  "category_id"
     t.jsonb    "properties",         default: {}
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
     t.string   "code",               default: ""
     t.text     "description",        default: ""
     t.decimal  "price",              default: "0.0"
     t.jsonb    "sample_products",    default: {}
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
   end
 
   create_table "ratings", force: :cascade do |t|

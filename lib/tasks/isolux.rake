@@ -15,7 +15,7 @@ task :parse_categories => :environment do
  		puts "== start parse #{head[:name]} =="
  		@page = open_uri(@base_uri + "/" + head[:permalink])
  		@parent_category = Category.find_by_site_permalink(clear_permalink(head[:permalink])) || 
- 							Category.create(:name => head[:name], :site_permalink => clear_permalink(head[:permalink]), :time_id => time_id_generation(clear_permalink(head[:permalink]),""))
+ 							Category.create(:shop_id => 1, :name => head[:name], :site_permalink => clear_permalink(head[:permalink]), :time_id => time_id_generation(clear_permalink(head[:permalink]),""))
  		unless @parent_category.nil?
  			second_round = compile(@page, @parent_category)
  			puts "#{second_round}"
@@ -53,7 +53,7 @@ def clear_permalink(permalink)
 end
 
 def compile(page, parent)
-	page.css(".categoryNavig ul li a").map{|a| {:site_permalink => clear_permalink(a['href'].split('/').last), :name => a.text, :parent_id => parent.id, :time_id =>time_id_generation(clear_permalink(a['href'].split('/').last,), parent.site_permalink)}}
+	page.css(".categoryNavig ul li a").map{|a| {:shop_id => 1, :site_permalink => clear_permalink(a['href'].split('/').last), :name => a.text, :parent_id => parent.id, :time_id =>time_id_generation(clear_permalink(a['href'].split('/').last,), parent.site_permalink)}}
 end
 
 def parse_products(categories_array, parent, all_products)
@@ -109,6 +109,7 @@ def get_css(uri, css_selector, index)
 end
 
 def open_uri(uri)
+	puts "#{uri}"
 	Nokogiri::HTML(open(uri))
 end
 
@@ -225,4 +226,3 @@ def get_category_id(doc, step=-2)
 	puts cat_link
 	product_time_id(cat_link)
 end
-

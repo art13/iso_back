@@ -7,6 +7,10 @@ class CreateTableProducts < ActiveRecord::Migration[5.0]
     	t.string :time_id
     	t.integer :category_id
     	t.jsonb :properties, :default => {}
+        t.string :code, :default => ""
+        t.text :description, :default => ""
+        t.decimal :price, :default => 0.0
+        t.jsonb :sample_products, :default => {}
         t.timestamps
     end
   end

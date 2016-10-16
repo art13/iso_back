@@ -7,14 +7,21 @@ class Category < ActiveRecord::Base
 	private
 	
 	def generate_permalink
-	  if Category.where(:permalink => self.site_permalink).count > 0
-	    n = 1
-	    while Category.where(:permalink => "#{self.site_permalink}-#{n}").count > 0
-	      n += 1
-	    end
-	    self.permalink = "#{self.site_permalink}-#{n}"
-	  else
-	    self.permalink = self.site_permalink
-	  end
+		site_permalink = self.site_permalink.split("/").last
+	  	if Category.where(:permalink => site_permalink).count > 0
+	    	n = 1
+	    	while Category.where(:permalink => "#{site_permalink}-#{n}").count > 0
+	     		n += 1
+	    	end
+	    	self.permalink = "#{site_permalink}-#{n}"
+	  	else
+	    	self.permalink = site_permalink
+	  	end
+	end
+	def self.isolux
+		scope = Category.where(:shop_id => 1)
+	end
+	def self.instr
+		scope = Category.where(:shop_id => 2)
 	end
 end
