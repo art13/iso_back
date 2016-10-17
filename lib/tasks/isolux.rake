@@ -18,9 +18,9 @@ task :parse_categories => :environment do
  							Category.create(:shop_id => 1, :name => head[:name], :site_permalink => clear_permalink(head[:permalink]), :time_id => time_id_generation(clear_permalink(head[:permalink]),""))
  		unless @parent_category.nil?
  			second_round = compile(@page, @parent_category)
- 			puts "#{second_round}"
+ 			puts "1 #{second_round}"
  			second_round.each do |second|
- 				puts "#{second}"
+ 				puts "2 #{second}"
  				if second[:name] != "Товары по акции"	
 	 				second_category = Category.find_by_time_id(second[:time_id]) || Category.create(second)
 	 				pager = @base_uri + "/" + clear_permalink(head[:permalink])+ "/" + second[:site_permalink] + ".html"
@@ -78,7 +78,7 @@ def parse_products(categories_array, parent, all_products)
 end
 
 def build_uri(uri_array, page=nil)
-	@base_uri = "http://new.isolux.ru"
+	@base_uri = "http://isolux.ru"
 	uri = "#{@base_uri}/#{uri_array.join('/')}.html?limit=#{@limit}"
 	uri += page ? "&p=#{page}" : ""
 	uri
@@ -93,7 +93,7 @@ end
 def get_items_links(uri_arr)
 	links = []
 	(1..get_max_page(uri_arr) ).each do |x|
-		links.concat get_css_list(build_uri(uri_arr), '.isolux-thumbnail-name a')
+		links.concat get_css_list(build_uri(uri_arr), '.item .product-name a')
 	end
 	links
 end
@@ -149,11 +149,11 @@ def parse_item(uri, categories, new_products, new_images)
 		out = {}
 		@images = []
 		
-		out[:name] = doc.css('.isolux-product-page-title h1 span').inner_text.strip
+		out[:name] = doc.css('.product-container .cart_title_product h1 span').inner_text.strip
 		out[:permalink] = uri.split("/")[3].split(".")[0].gsub("-","_")
 		out[:time_id] = product_time_id(out[:permalink])
 		
-		picc = doc.css('.slickslider a')
+		picc = doc.css('.product_image a')
 		out[:photo] = picc.length==0 ? "" : URI.parse(picc[0]['href'].split("?").first)
 		begin
 			category_tray = categories.find_by_time_id(get_category_id(doc))
@@ -165,18 +165,18 @@ def parse_item(uri, categories, new_products, new_images)
 		end
 		props = []
 		
-		doc.css('#tabmenu-attributes table tr').each do |x| 
+		doc.css('#product-attribute-specs-table table tr').each do |x| 
 		    o = {}
 		    o[:key] = x.css('td')[0].inner_text.strip
 		    o[:val] = x.css('td')[1].inner_text.strip
 		
 		    props.push o
 		end
-		out[:code] = doc.css("span.isolux-product-page-sku-number").inner_text
-		out[:price] = doc.css(".prices-block .more-than-40 .cur-price").inner_text.gsub(" ", "").to_f
-		out[:description] = doc.css("#tabmenu-description div div p").map{|x| "<p>#{x.text.strip}</p>" unless x.text.blank?}.join
+		out[:code] = doc.css("#super-product-table tbody td.ac").inner_text.strip.split(" ").first
+		out[:price] = doc.css("#super-product-table tbody td.cost3").inner_text.gsub(" ", "").to_f
+		out[:description] = doc.css("#full-description p").map{|x| "<p>#{x.text.strip}</p>" unless x.text.blank?}.join
 		out[:properties] = props.uniq.to_json
-		imgs = doc.css(".isolux-product-page-slider .slickslider .slide img").map{|a| a.attr("src").split("?").first}.uniq
+		imgs = doc.css(".product_left_info .small_img .gallery_elements").map{|a| a.attr("href").split("?").first}.uniq
 		imgs.shift
 		puts "==== #{imgs} ---"
 		Array(imgs).each do |i|
