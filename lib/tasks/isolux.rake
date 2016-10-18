@@ -137,7 +137,7 @@ def starting_parse_items(links, categories)
 		end
 	end
 	Product.create(@new_products)	
-	Image.create(@images.map{|i| {:product_id => Product.find_by_permalink(i[:product].id), :file => i[:image] }})
+	Image.create(@images.map{|i| {:product_id => Product.find_by_permalink(i[:product]).id, :file => i[:image] }})
 
 end
 
@@ -164,14 +164,19 @@ def parse_item(uri, categories, new_products, new_images)
 			puts "#{get_category_id(doc, -3)}"
 		end
 		props = []
-		
-		doc.css('#product-attribute-specs-table table tr').each do |x| 
-		    o = {}
-		    o[:key] = x.css('td')[0].inner_text.strip
-		    o[:val] = x.css('td')[1].inner_text.strip
+		x = doc.css('#product-attribute-specs-table th').map{|a| a.css(".wrap_word").text.strip.squish}
+		y = doc.css('#product-attribute-specs-table td').map{|a| a.text.strip.squish}
+		(0..x.size-1).each do |i|
+			o = {}
+
+		    o[:key] = x[i]
+		    o[:val] = y[i]
 		
 		    props.push o
 		end
+		# doc.css('#product-attribute-specs-table table tr').each do |x| 
+		    
+		# end
 		out[:code] = doc.css("#super-product-table tbody td.ac").inner_text.strip.split(" ").first
 		out[:price] = doc.css("#super-product-table tbody td.cost3").inner_text.gsub(" ", "").to_f
 		out[:description] = doc.css("#full-description p").map{|x| "<p>#{x.text.strip}</p>" unless x.text.blank?}.join
@@ -187,7 +192,7 @@ def parse_item(uri, categories, new_products, new_images)
 			end
 		end
 		puts "#{out}"
-		puts "#{@images}"
+		puts "#{@images}"	
 		@current_product = Product.find_by_time_id(out[:time_id])
 		puts "#{@current_product}" 
 		if @current_product.nil?  

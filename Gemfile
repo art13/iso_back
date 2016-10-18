@@ -10,6 +10,10 @@ gem 'unirest'
 gem 'paperclip'
 gem 'nokogiri'
 gem 'kaminari'
+#gem "activeadmin"
+gem 'inherited_resources', github: 'activeadmin/inherited_resources'
+gem 'activeadmin', github: 'activeadmin'
+gem 'devise'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
