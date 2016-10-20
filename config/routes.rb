@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  devise_for :dealers
+  devise_for :customers
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
 	resources :products, :only => [:index, :show]

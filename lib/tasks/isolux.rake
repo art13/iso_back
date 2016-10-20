@@ -178,7 +178,7 @@ def parse_item(uri, categories, new_products, new_images)
 		    
 		# end
 		out[:code] = doc.css("#super-product-table tbody td.ac").inner_text.strip.split(" ").first
-		out[:price] = doc.css("#super-product-table tbody td.cost3").inner_text.gsub(" ", "").to_f
+		out[:price] = doc..css("#super-product-table tbody td.cost3 .regular-price .price").text.squish.split(",").first.gsub(" ", "").to_f
 		out[:description] = doc.css("#full-description p").map{|x| "<p>#{x.text.strip}</p>" unless x.text.blank?}.join
 		out[:properties] = props.uniq.to_json
 		imgs = doc.css(".product_left_info .small_img .gallery_elements").map{|a| a.attr("href").split("?").first}.uniq
