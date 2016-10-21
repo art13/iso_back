@@ -1,4 +1,7 @@
 ru:
+  time:
+    formats:
+      long: "%Y-%m-%d %H:%M:%S"
   active_admin:
     dashboard: "Панель управления"
     dashboard_welcome:
