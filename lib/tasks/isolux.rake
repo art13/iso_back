@@ -130,11 +130,11 @@ def starting_parse_items(links, categories)
 	    num += 1
 	    print "Парсинг категории , #{num*100 / links.length} % завершено \r"
 	    #@products << parse_item(link)
-	    begin
+	    #begin
 			parse_item(link, @categories, @new_products, @images) # thread
-		rescue => e
-			puts "error #{e}"
-		end
+		# rescue => e
+		# 	puts "error #{e}"
+		# end
 	end
 	Product.create(@new_products)	
 	Image.create(@images.map{|i| {:product_id => Product.find_by_permalink(i[:product]).id, :file => i[:image] }})
@@ -155,14 +155,14 @@ def parse_item(uri, categories, new_products, new_images)
 		
 		picc = doc.css('.product_image a')
 		out[:photo] = picc.length==0 ? "" : URI.parse(picc[0]['href'].split("?").first)
-		begin
+		#begin
 			category_tray = categories.find_by_time_id(get_category_id(doc))
 			out[:category_id] = category_tray.nil? ? categories.find_by_time_id(get_category_id(doc, -3)).id : category_tray.id 
-		rescue
-			out[:category_id] =  new_products.last[:category_id]
-			puts "#{get_category_id(doc)}"
-			puts "#{get_category_id(doc, -3)}"
-		end
+		#rescue
+		# 	out[:category_id] =  new_products.last[:category_id]
+		# 	puts "#{get_category_id(doc)}"
+		# 	puts "#{get_category_id(doc, -3)}"
+		# end
 		props = []
 		x = doc.css('#product-attribute-specs-table th').map{|a| a.css(".wrap_word").text.strip.squish}
 		y = doc.css('#product-attribute-specs-table td').map{|a| a.text.strip.squish}
@@ -178,7 +178,7 @@ def parse_item(uri, categories, new_products, new_images)
 		    
 		# end
 		out[:code] = doc.css("#super-product-table tbody td.ac").inner_text.strip.split(" ").first
-		out[:price] = doc..css("#super-product-table tbody td.cost3 .regular-price .price").text.squish.split(",").first.gsub(" ", "").to_f
+		out[:price] = doc.css("#super-product-table tbody td.cost3 .regular-price .price").text.squish.split(",").first.gsub(" ", "").to_f
 		out[:description] = doc.css("#full-description p").map{|x| "<p>#{x.text.strip}</p>" unless x.text.blank?}.join
 		out[:properties] = props.uniq.to_json
 		imgs = doc.css(".product_left_info .small_img .gallery_elements").map{|a| a.attr("href").split("?").first}.uniq
