@@ -15,6 +15,18 @@ ActiveAdmin.register Customer do
 		column :email
 		column :phone
 	end
+	form do |f|
+	    f.inputs "Customers" do
+	      f.input :name
+	      f.input :lastname
+	      f.input :nickname
+	      f.input :email
+	      f.input :phone
+	      f.input :password
+	      f.input :password_confirmation
+	    end
+	    f.actions
+	end
 	show  :download_links => false do |user|  
 		attributes_table do
 	        row :name

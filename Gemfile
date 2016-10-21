@@ -14,6 +14,8 @@ gem 'kaminari'
 gem 'inherited_resources', github: 'activeadmin/inherited_resources'
 gem 'activeadmin', github: 'activeadmin'
 gem 'devise'
+gem 'devise_token_auth' 
+gem 'omniauth'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do

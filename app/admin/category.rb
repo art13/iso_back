@@ -11,6 +11,14 @@ ActiveAdmin.register Category do
 		column :parent
 		actions
 	end
+	form do |f|
+		f.inputs do
+			 f.input :name
+			 f.input :parent, :as => :select
+			 f.input :site_permalink
+		end
+		f.actions
+	end 
 	show do |category|  
 		attributes_table do
 		 row :name

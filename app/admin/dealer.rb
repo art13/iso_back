@@ -4,7 +4,7 @@ ActiveAdmin.register Dealer do
 	filter :shopname
 	filter :email
 	filter :created_at
-	actions :all, :except => [:new,:edit]
+	actions :all#, :except => [:new,:edit]
 
 	index do 
 		selectable_column
@@ -12,6 +12,18 @@ ActiveAdmin.register Dealer do
 		column :lastname
 		column :shopname
 		column :email
+	end
+	form do |f|
+	    f.inputs "Dealers" do
+	      f.input :name
+	      f.input :lastname
+	      f.input :shopname
+	      f.input :email
+	      f.input :shop_url
+	      f.input :password
+	      f.input :password_confirmation
+	    end
+	    f.actions
 	end
 	show  :download_links => false do |user|  
 		attributes_table do
