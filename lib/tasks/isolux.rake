@@ -129,7 +129,6 @@ def starting_parse_items(links, categories)
 	links.each  do |link|
 	    num += 1
 	    print "Парсинг категории , #{num*100 / links.length} % завершено \r"
-	    #@products << parse_item(link)
 	    begin
 			parse_item(link, @categories, @new_products, @images) # thread
 		 rescue => e
@@ -174,9 +173,6 @@ def parse_item(uri, categories, new_products, new_images)
 		
 		    props.push o
 		end
-		# doc.css('#product-attribute-specs-table table tr').each do |x| 
-		    
-		# end
 		out[:code] = doc.css("#super-product-table tbody td.ac").inner_text.strip.split(" ").first
 		out[:price] = doc.css("#super-product-table tbody td.cost3 .regular-price .price").text.squish.split(",").first.gsub(" ", "").to_f
 		out[:description] = doc.css("#full-description p").map{|x| "<p>#{x.text.strip}</p>" unless x.text.blank?}.join

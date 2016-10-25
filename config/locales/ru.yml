@@ -1,4 +1,70 @@
 ru:
+  activerecord:
+    models:
+      admin_user:
+        one: Админ
+        many: Админы
+        other: Админы
+      category: 
+        one: Категория
+        many: Категории
+        other: Категория
+      product:
+        one: Товар
+        many: Товары
+        other: Товар
+      dealer:
+        one: Продавец
+        many: Продавцы
+        other: Продавец
+      customer:
+        one: Покупатель
+        many: Покупатели
+        other: Покупатель
+      image:
+        one: Картинка
+        many: Картинки
+        other: Картинка
+    attributes:
+      category:
+        name: "Название"
+        site_permalink: Постоянная ссылка
+        parent: Родительская категория
+        created_at: Дата создания
+        updated_at: Обновлён
+        shop_id: Магазин
+      product:
+        name: Название
+        permalink: Ссылка
+        image: Изображение
+        category: Категория
+        properties: Свойства
+        code: Код
+        description: Описание
+        price: Стоимость
+        sample_products: Похожие товары
+        created_at: Дата создания
+        updated_at: Обновлён
+      dealer:
+        name: Имя
+        lastname: Фамилия
+        shopname: Магазин
+        shop_url: Сайт
+        email: Email
+        password: Пароль
+        password_confirmation: Подтверждение пароля
+      customer:
+        name: Имя
+        lastname: Фамилия
+        nickname: Псевдоним
+        phone: Телефон
+        email: Email
+        password: Пароль
+        password_confirmation: Подтверждение пароля
+      image:
+        product: Товар
+        name: Название
+        file: Файл
   time:
     formats:
       long: "%Y-%m-%d %H:%M:%S"

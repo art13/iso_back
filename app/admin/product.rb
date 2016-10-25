@@ -3,21 +3,22 @@ ActiveAdmin.register Product do
         @product = Product.find_by_permalink(params[:id])
     end
 	filter :name
-	#filter :permalink
 	filter :code
 	filter :price
 	filter :created_at
+	filter :updated_at
 	index do 
 		selectable_column
+		column :id
 		column :name do |p|
 			link_to p.name, admin_product_path(p)
 		end
-		#column :permalink
 		column "image" do |product|
 		  image_tag product.photo.url, class: 'pic'
 		end
 		column :price
 		column :created_at
+		column :updated_at
 		actions
 	end
 	form do |f|
