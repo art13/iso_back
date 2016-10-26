@@ -3,16 +3,17 @@ module Api
 		def index
 			params[:per_page] ||= 100
 			params[:page] ||= 1
-			
-			@products =
+			@product_s = Product
+			@product_s = @product_s.search_by_props(params[:prop_eq]) if params[:prop_eq]
+			@products = 
 			if params[:in_category]
-				asjson_filter(Product.where(:category_id => params[:in_category].to_i))
+				pr_s = asjson_filter(@product_s.where(:category_id => params[:in_category].to_i))
+				Kaminari.paginate_array(pr_s).page(params[:page]).per(params[:per_page])
 			else
-				asjson( params[:page].to_i > 1 ? Product.order("id ASC").where("id > ?", params[:per_page].to_i*params[:page].to_i).limit(params[:per_page].to_i) : Product.first(params[:per_page].to_i))
-				#asjson(Product.find_each(:batch_size => 1000))
+				asjson( params[:page].to_i > 1 ? product_s.order("id ASC").where("id > ?", params[:per_page].to_i*params[:page].to_i).limit(params[:per_page].to_i) : @product_s.first(params[:per_page].to_i))
 			end
-			max_count = Product.all.size
-			#@products = Kaminari.paginate_array(@products).page(params[:page]).per(params[:per_page])
+			max_count = @product_s.all.size
+			# products = Kaminari.paginate_array(@products).page(params[:page]).per(params[:per_page])
 			@count = @products.size
 			render :json => {:per_page => params[:per_page].to_i, :current_page => params[:page].to_i,
 							 :max_count => max_count, :count_on_page => @count, :products =>  @products} 

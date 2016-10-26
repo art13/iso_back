@@ -123,7 +123,7 @@ def parse_product(uri, new_products, categories, category_link)
 		out[:code] = doc.css("#aboveImageBlock .codeToOrder").inner_text
 		out[:price] = doc.css(".price-value").inner_text.gsub(" ", "").to_f
 		out[:description] = doc.css("#tab1_content .fs-13.c-gray3 p").inner_text
-		out[:properties] = props.uniq.to_json
+		out[:properties] = props.uniq
 		picc = doc.css("#goods-img-block a.image img").attr("src").text.gsub("461x415", "300x300").gsub("//","http://")
 		out[:photo] = picc.length==0 ? "" : URI.parse(picc)
 		puts "#{out}"

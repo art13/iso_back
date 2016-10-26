@@ -25,7 +25,7 @@ class Product < ActiveRecord::Base
     # end
 
     def product_properties
-    	JSON.parse(self.properties)
+    	self.properties
     end
 	
 	def product_categories
@@ -66,9 +66,17 @@ class Product < ActiveRecord::Base
 		[self.images.map{|i| i.file.url.split("?").first}]	
 	end
 
+	def self.search_by_props(values)
+		begin
+			search_by = values.map{|v| {key:v[0],val:v[1]}}
+			where("properties @>?", search_by.to_json)
+		rescue
+			Product
+		end
+	end
+
 	private
-	
-		def destroy_photo?
+		def destroy_photo
 		   	self.photo.destroy if self.photo
 		end
 end

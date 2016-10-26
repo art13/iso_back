@@ -168,15 +168,15 @@ def parse_item(uri, categories, new_products, new_images)
 		(0..x.size-1).each do |i|
 			o = {}
 
-		    o[:key] = x[i]
-		    o[:val] = y[i]
+		    o['key'] = x[i]
+		    o['val'] = y[i]
 		
 		    props.push o
 		end
 		out[:code] = doc.css("#super-product-table tbody td.ac").inner_text.strip.split(" ").first
 		out[:price] = doc.css("#super-product-table tbody td.cost3 .regular-price .price").text.squish.split(",").first.gsub(" ", "").to_f
 		out[:description] = doc.css("#full-description p").map{|x| "<p>#{x.text.strip}</p>" unless x.text.blank?}.join
-		out[:properties] = props.uniq.to_json
+		out[:properties] = props.uniq
 		imgs = doc.css(".product_left_info .small_img .gallery_elements").map{|a| a.attr("href").split("?").first}.uniq
 		imgs.shift
 		puts "==== #{imgs} ---"
