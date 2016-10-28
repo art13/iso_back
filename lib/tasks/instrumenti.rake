@@ -3,14 +3,14 @@ task :parse_instrumenti => :environment do
 	@url = "http://www.vseinstrumenti.ru"	
 	@heads = [{:name=>"Инструмент", :permalink=>"instrument"}, 
 	{:name=>"Все для сада", :permalink=>"sadovaya_tehnika"}, 
-	{:name=>"Ручной инструмент", :permalink=>"ruchnoy_instrument"}, 
 	{:name=>"Силовая техника", :permalink=>"silovaya_tehnika"}, 
 	{:name=>"Станки", :permalink=>"stanki"},
 	{:name=>"Техника для климата, уборки", :permalink=>"klimat"}, 
 	{:name=>"Электрика и свет", :permalink=>"electrika_i_svet"},
 	{:name=>"Строительное оборудование", :permalink=>"stroitelnaya_tehnika_i_oborudovanie"}, 
 	{:name=>"Автосервисное оборудование", :permalink=>"avtogarazhnoe_oborudovanie"},
- 	{:name=>"Расходка, крепеж, спецодежда", :permalink=>"rashodnie_materialy"}]#,
+ 	{:name=>"Расходка, крепеж, спецодежда", :permalink=>"rashodnie_materialy"},
+ 	{:name=>"Ручной инструмент", :permalink=>"ruchnoy_instrument"}]#,
  	# {:name=>"Товары для отдыха", :permalink=>"otdyh"}]
  	@page = open_uri(@url)
  	@links = []
@@ -115,15 +115,13 @@ def parse_product(uri, new_products, categories, category_link)
 		# doc.css("#goodThValue .thValueBlock").map{|a| [a.css(".thName").text, a.css(".thValue").text]}
 		doc.css("#goodThValue .thValueBlock").each do |x| 
 		    o = {}
-		    o[:key] = x.css('.thName').inner_text.strip
-		    o[:val] = x.css('.thValue').inner_text.strip
-		
+		    o[x.css('.thName').inner_text.strip] = x.css('.thValue').inner_text.strip		
 		    props.push o
 		end
 		out[:code] = doc.css("#aboveImageBlock .codeToOrder").inner_text
 		out[:price] = doc.css(".price-value").inner_text.gsub(" ", "").to_f
 		out[:description] = doc.css("#tab1_content .fs-13.c-gray3 p").inner_text
-		out[:properties] = props.uniq
+		out[:properties] = props.uniq.reduce({}, :merge)
 		picc = doc.css("#goods-img-block a.image img").attr("src").text.gsub("461x415", "300x300").gsub("//","http://")
 		out[:photo] = picc.length==0 ? "" : URI.parse(picc)
 		puts "#{out}"

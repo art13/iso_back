@@ -1,16 +1,22 @@
 module Api
 	class ProductsController < ApplicationController
 		def index
-			params[:per_page] ||= 100
-			params[:page] ||= 1
+			params[:per_page] ||= "100"
+			params[:page] ||= "1"
 			@product_s = Product
 			@product_s = @product_s.search_by_props(params[:prop_eq]) if params[:prop_eq]
+			params[:props_lt].to_a.each do |prop|
+				@product_s = @product_s.props_lt(prop[0], prop[1])
+			end if params[:props_lt].present?
+			params[:props_gt].to_a.each do |prop|
+				@product_s = @product_s.props_gt(prop[0], prop[1])
+			end if params[:props_gt].present?
 			@products = 
 			if params[:in_category]
 				pr_s = asjson_filter(@product_s.where(:category_id => params[:in_category].to_i))
 				Kaminari.paginate_array(pr_s).page(params[:page]).per(params[:per_page])
 			else
-				asjson( params[:page].to_i > 1 ? product_s.order("id ASC").where("id > ?", params[:per_page].to_i*params[:page].to_i).limit(params[:per_page].to_i) : @product_s.first(params[:per_page].to_i))
+				asjson( params[:page].to_i > 1 ? @product_s.order("id ASC").where("id > ?", params[:per_page].to_i*params[:page].to_i).limit(params[:per_page].to_i) : @product_s.first(params[:per_page].to_i))
 			end
 			max_count = @product_s.all.size
 			# products = Kaminari.paginate_array(@products).page(params[:page]).per(params[:per_page])

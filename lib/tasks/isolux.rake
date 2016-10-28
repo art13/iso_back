@@ -142,7 +142,7 @@ end
 
 def parse_item(uri, categories, new_products, new_images)
 		
-		@update_products = []
+		@update_products = [] 
 		@products = []
 		doc = open_uri(uri)
 		out = {}
@@ -167,16 +167,19 @@ def parse_item(uri, categories, new_products, new_images)
 		y = doc.css('#product-attribute-specs-table td').map{|a| a.text.strip.squish}
 		(0..x.size-1).each do |i|
 			o = {}
-
-		    o['key'] = x[i]
-		    o['val'] = y[i]
-		
+		    value = y[i].gsub(',','.').to_f
+		    key = x[i].gsub(":","").strip
+		    if value != 0.0 
+		    	o[key+", "+y[i].split(' ').last] = value
+		    else
+		    	o[key] = y[i]
+			end
 		    props.push o
 		end
 		out[:code] = doc.css("#super-product-table tbody td.ac").inner_text.strip.split(" ").first
 		out[:price] = doc.css("#super-product-table tbody td.cost3 .regular-price .price").text.squish.split(",").first.gsub(" ", "").to_f
 		out[:description] = doc.css("#full-description p").map{|x| "<p>#{x.text.strip}</p>" unless x.text.blank?}.join
-		out[:properties] = props.uniq
+		out[:properties] = props.uniq.reduce({}, :merge)
 		imgs = doc.css(".product_left_info .small_img .gallery_elements").map{|a| a.attr("href").split("?").first}.uniq
 		imgs.shift
 		puts "==== #{imgs} ---"
