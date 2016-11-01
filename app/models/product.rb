@@ -1,8 +1,9 @@
 class Product < ActiveRecord::Base
 
 	before_destroy :destroy_photo
-
+	belongs_to :product_update
 	belongs_to :category
+	belongs_to :admin_user
 	# has_many :ratings, dependent: :destroy
 	# has_many :comments, dependent: :destroy
 	has_many :images, dependent: :destroy

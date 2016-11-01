@@ -27,6 +27,15 @@ GIT
       railties (>= 3.2, < 5.1)
       responders
 
+GIT
+  remote: https://github.com/lynndylanhurley/devise_token_auth.git
+  revision: 123cfb730ebaf4e2acc124edd39e68816cb0b8cf
+  branch: master
+  specs:
+    devise_token_auth (0.1.39)
+      devise (> 3.5.2, <= 4.2)
+      rails (< 6)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -103,9 +112,6 @@ GEM
       railties (>= 4.1.0, < 5.1)
       responders
       warden (~> 1.2.3)
-    devise_token_auth (0.1.39)
-      devise (> 3.5.2, <= 4.2)
-      rails (< 6)
     erubis (2.7.0)
     execjs (2.7.0)
     formtastic (3.1.4)
@@ -244,7 +250,7 @@ DEPENDENCIES
   capistrano
   coffee-rails
   devise
-  devise_token_auth
+  devise_token_auth!
   inherited_resources!
   jquery-rails
   kaminari

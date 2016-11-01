@@ -8,23 +8,23 @@ ru:
       category: 
         one: Категория
         many: Категории
-        other: Категория
+        other: Категории
       product:
         one: Товар
         many: Товары
-        other: Товар
+        other: Товары
       dealer:
         one: Продавец
         many: Продавцы
-        other: Продавец
+        other: Продавецы
       customer:
         one: Покупатель
         many: Покупатели
-        other: Покупатель
+        other: Покупатели
       image:
         one: Картинка
         many: Картинки
-        other: Картинка
+        other: Картинки
     attributes:
       category:
         name: "Название"
@@ -44,7 +44,8 @@ ru:
         price: Стоимость
         sample_products: Похожие товары
         created_at: Дата создания
-        updated_at: Обновлён
+        updated_at: Дата последнего обновления
+        admin_user: Обновлён пользователем
       dealer:
         name: Имя
         lastname: Фамилия
