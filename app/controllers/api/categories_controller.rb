@@ -1,5 +1,5 @@
 module Api
-	class CategoriesController < ApiController
+	class CategoriesController < ApplicationApiController
 		def index
 			params[:per_page] ||= 100
 			params[:page] ||= 1

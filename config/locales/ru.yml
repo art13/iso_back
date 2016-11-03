@@ -1,4 +1,6 @@
 ru:
+  category: Категория
+  update_all_products: Выделенные продукты обновлены
   activerecord:
     models:
       admin_user:
@@ -134,6 +136,7 @@ ru:
       button_label: "Oперации"
     batch_actions:
       button_label: "Групповые операции"
+      add_to_category_confirmation: Выберите категорию из списка
       default_confirmation: "Вы уверены, что вы хотите это сделать?"
       delete_confirmation: "Вы уверены, что хотите удалить %{plural_model}?"
       succesfully_destroyed:
@@ -143,9 +146,12 @@ ru:
         other: "Успешно удалено: %{count} %{plural_model}"
       selection_toggle_explanation: "(Отметить всё / Снять выделение)"
       link: "Создать"
-      action_label: "%{title} выбранное"
+      action_label: "%{title}"
+      input_label: "%{title}"
       labels:
+        add_to_category: Изменить категорию
         destroy: "Удалить"
+        category: Категория
     comments:
       created_at: "Дата создания"
       resource_type: "Тип ресурса"

@@ -1,5 +1,5 @@
 module Api
-	class ProductsController < ApiController
+	class ProductsController < ApplicationController
 		def index
 			params[:per_page] ||= "100"
 			params[:page] ||= "1"

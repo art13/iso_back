@@ -8,4 +8,6 @@ filter
 
 product
 	prop_eq[key#{n}]=val#{n}
+	prop_lt[key#{n}]=val#{n}
+	prop_gt[key#{n}]=val#{n}
 	in_category=#{category_id}
