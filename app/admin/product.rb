@@ -39,7 +39,7 @@ ActiveAdmin.register Product do
 			f.input :code
 			f.input :category, :as => :select
 			f.input :photo, :as => :file
-			f.input :description
+			f.input :description, :input_html => { :class => "tinymce" }
 			f.input :admin_user_id, :input_html => { :value => current_admin_user.id }, as: :hidden
 		end
 		f.actions

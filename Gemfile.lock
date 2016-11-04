@@ -225,6 +225,10 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.5)
+    tinymce-rails (4.4.3)
+      railties (>= 3.1.1)
+    tinymce-rails-langs (4.20160310)
+      tinymce-rails (~> 4.1, >= 4.1.10)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (3.0.2)
@@ -260,6 +264,8 @@ DEPENDENCIES
   pg
   rails (>= 5.0.0.rc2, < 5.1)
   sass-rails
+  tinymce-rails
+  tinymce-rails-langs
   uglifier (>= 1.0.3)
   unicorn
   unirest

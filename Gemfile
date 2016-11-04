@@ -16,7 +16,8 @@ gem 'activeadmin', github: 'activeadmin'
 gem 'devise'
 gem 'devise_token_auth', :git => 'https://github.com/lynndylanhurley/devise_token_auth.git', :branch => 'master'
 gem 'omniauth'
-
+gem 'tinymce-rails'
+gem 'tinymce-rails-langs'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
