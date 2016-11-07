@@ -18,10 +18,20 @@ class Category < ActiveRecord::Base
 	    	self.permalink = site_permalink
 	  	end
 	end
+
 	def self.isolux
 		scope = Category.where(:shop_id => 1)
 	end
+
 	def self.instr
 		scope = Category.where(:shop_id => 2)
+	end
+
+	def self.get_parents
+		where(:parent_id => 0)
+	end
+
+	def self.get_children(parent_id)
+		where(:parent_id => parent_id)
 	end
 end

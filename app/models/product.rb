@@ -72,7 +72,7 @@ class Product < ActiveRecord::Base
 	end
 
 	def self.between_props(key, min, max)
-		where("properties -> '#{key}' BETWEEN '#{max}' AND '#{max}' ")
+		where("properties -> '#{key}' BETWEEN '#{min}' AND '#{max}' ")
 	end
 
 	def self.props_lt(key, max)
@@ -81,6 +81,12 @@ class Product < ActiveRecord::Base
 
 	def self.props_gt(key, min)
 		where("properties -> '#{key}' > '#{min}' ")
+	end
+
+	def self.price_btw(min = 0, max = 1000000)
+		min = 0 if min.nil?
+		max = 1000000 if max.nil?
+		where("price BETWEEN '#{min}' AND '#{max}' ")
 	end
 
 	private

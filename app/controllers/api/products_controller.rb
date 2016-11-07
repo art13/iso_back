@@ -11,6 +11,9 @@ module Api
 			params[:props_gt].to_a.each do |prop|
 				@product_s = @product_s.props_gt(prop[0], prop[1])
 			end if params[:props_gt].present?
+			if params[:price_lt] || params[:price_gt]
+				@product_s = @product_s.price_btw(params[:price_gt], params[:price_lt])
+			end
 			@products = 
 			if params[:in_category]
 				pr_s = asjson_filter(@product_s.where(:category_id => params[:in_category].to_i))
