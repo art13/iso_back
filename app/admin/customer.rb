@@ -1,11 +1,12 @@
 ActiveAdmin.register Customer do
+	batch_action :destroy, false
 	filter :name
 	filter :lastname
 	filter :nickname
 	filter :email
 	filter :phone
 	filter :created_at
-	actions :all, :except => [:new,:edit]
+	actions :all, :except => [:new,:edit,:delete]
 
 	index do 
 		selectable_column
@@ -14,6 +15,7 @@ ActiveAdmin.register Customer do
 		column :nickname
 		column :email
 		column :phone
+		actions
 	end
 	form do |f|
 	    f.inputs "Customers" do

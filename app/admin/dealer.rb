@@ -1,10 +1,11 @@
 ActiveAdmin.register Dealer do
+	# batch_actions =>  false	
 	filter :name
 	filter :lastname
 	filter :shopname
 	filter :email
 	filter :created_at
-	actions :all#, :except => [:new,:edit]
+	actions :all, :except => [:new,:edit, :destroy]
 
 	index do 
 		selectable_column
@@ -12,6 +13,7 @@ ActiveAdmin.register Dealer do
 		column :lastname
 		column :shopname
 		column :email
+		actions
 	end
 	form do |f|
 	    f.inputs "Dealers" do

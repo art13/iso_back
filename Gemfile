@@ -10,14 +10,20 @@ gem 'unirest'
 gem 'paperclip'
 gem 'nokogiri'
 gem 'kaminari'
-#gem "activeadmin"
+#admin
 gem 'inherited_resources', github: 'activeadmin/inherited_resources'
 gem 'activeadmin', github: 'activeadmin'
+gem 'tinymce-rails'
+gem 'tinymce-rails-langs'
+#auth
 gem 'devise'
 gem 'devise_token_auth', :git => 'https://github.com/lynndylanhurley/devise_token_auth.git', :branch => 'master'
 gem 'omniauth'
-gem 'tinymce-rails'
-gem 'tinymce-rails-langs'
+gem 'omniauth-facebook'
+gem 'omniauth-google-oauth2'
+gem 'omniauth-twitter'
+
+
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
