@@ -1,5 +1,5 @@
 ActiveAdmin.register Dealer do
-	# batch_actions =>  false	
+	batch_action :destroy, false	
 	filter :name
 	filter :lastname
 	filter :shopname

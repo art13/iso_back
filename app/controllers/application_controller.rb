@@ -1,17 +1,9 @@
 class ApplicationController < ActionController::Base
   	protect_from_forgery with: :null_session
 	before_filter :configure_permitted_parameters, if: :devise_controller?
-
 	protected
 
 	def configure_permitted_parameters
-		# if params[:customer]
-		# 	puts "customer"
-	     	devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :nickname, :lastname, :phone, :shopname, :shop_url])
-		# end
-		# if params[:dealer]
-		# 	puts "deaaler"
-		# 	devise_parameter_sanitizer.permit(:sign_up, keys: [:name,)
-		# end
+	    devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :nickname, :lastname, :phone, :shopname, :shop_url])
 	end
 end
