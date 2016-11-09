@@ -3,8 +3,13 @@ class Category < ActiveRecord::Base
 	belongs_to :parent, :class_name => "Category"
 	has_many :children, :foreign_key => "parent_id", :class_name => "Category"
 	has_many :products
-	private
 	
+	def product_name
+    	"#{self.name} (#{self.products.size})"	
+    end
+    
+	private
+
 	def generate_permalink
 		site_permalink = self.site_permalink.split("/").last
 	  	if Category.where(:permalink => site_permalink).count > 0

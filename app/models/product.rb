@@ -24,7 +24,7 @@ class Product < ActiveRecord::Base
     # def code
     # 	self.time_id
     # end
-
+   
     def product_properties
     	self.properties
     end

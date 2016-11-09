@@ -26,6 +26,7 @@ ActiveAdmin.register Product do
 		column :image do |product|
 		  image_tag product.photo.url, class: 'pic'
 		end
+		column :category
 		column :price
 		column :created_at
 		column :updated_at

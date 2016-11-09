@@ -6,9 +6,11 @@ ActiveAdmin.register Category do
 	# filter :created_at
 	sortable tree: true,
 			sorting_attribute: :id,
-			roots_collection: proc { @categories.where(:parent_id => 0) } 
+			collapsible: true,
+			start_collapsed: true,
+			roots_collection: proc { @categories.where(:parent_id => 0).first(2) } 
 	index :as => :sortable do
-	    label :name # item content
+	    label  :product_name# item content
 	    actions
 	end
 	# index do 
