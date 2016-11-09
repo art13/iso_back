@@ -1,4 +1,3 @@
-class ApiController < ActionController::Base
-	puts "getsss"
+class ApiController < ActionController::Bases
 	include DeviseTokenAuth::Concerns::SetUserByTokens
 end

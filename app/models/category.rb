@@ -1,6 +1,5 @@
 class Category < ActiveRecord::Base
 	before_validation :generate_permalink
-
 	belongs_to :parent, :class_name => "Category"
 	has_many :children, :foreign_key => "parent_id", :class_name => "Category"
 	has_many :products

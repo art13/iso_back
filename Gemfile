@@ -15,6 +15,8 @@ gem 'inherited_resources', github: 'activeadmin/inherited_resources'
 gem 'activeadmin', github: 'activeadmin'
 gem 'tinymce-rails'
 gem 'tinymce-rails-langs'
+gem 'activeadmin_addons'
+gem "active_admin-sortable_tree"
 #auth
 gem 'devise'
 gem 'devise_token_auth', :git => 'https://github.com/lynndylanhurley/devise_token_auth.git', :branch => 'master'
