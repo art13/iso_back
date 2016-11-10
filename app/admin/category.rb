@@ -9,7 +9,7 @@ ActiveAdmin.register Category do
 			sorting_attribute: :id,
 			collapsible: true,
 			start_collapsed: true,
-			roots_collection: proc { @categories.where("parent_id =? or parent_id=?",  nil, 0) } 
+			roots_collection: proc { @categories.where(:parent_id => 0) } 
 	index :as => :sortable do
 	    label  :name# item content
 	    actions
@@ -31,7 +31,7 @@ ActiveAdmin.register Category do
 	form do |f|
 		f.inputs do
 			 f.input :name
-			 f.input :parent, :as => :select, include_blank: true
+			 f.input :parent, :as => :select, :collection => ["",""] << Category.all.map{|a| [a.name, a.id]} 
 			 f.input :site_permalink
 		end
 		f.actions

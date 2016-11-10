@@ -1,6 +1,7 @@
 class Category < ActiveRecord::Base
 	before_validation :generate_permalink
 	belongs_to :parent, :class_name => "Category"
+	before_validation :check_nil_parent
 	has_many :children, :foreign_key => "parent_id", :class_name => "Category"
 	has_many :products
 	
@@ -37,5 +38,8 @@ class Category < ActiveRecord::Base
 
 	def self.get_children(parent_id)
 		where(:parent_id => parent_id)
+	end
+	def check_nil_parent
+		self.parent_id = 0 if self.parent_id.nil? 
 	end
 end
