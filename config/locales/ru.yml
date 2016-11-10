@@ -31,10 +31,12 @@ ru:
       category:
         name: "Название"
         site_permalink: Постоянная ссылка
+        permalink: Постоянная ссылка
         parent: Родительская категория
         created_at: Дата создания
         updated_at: Обновлён
         shop_id: Магазин
+        show_on_front: Показывать на клиенте
       product:
         name: Название
         permalink: Ссылка

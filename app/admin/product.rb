@@ -17,6 +17,8 @@ ActiveAdmin.register Product do
 	filter :price
 	filter :created_at
 	filter :updated_at
+	filter :admin_user, as: :select, :collection => AdminUser.all.map{|a| [a.email, a.id]}
+	filter :category
 	index do 
 		selectable_column
 		column :id

@@ -17,6 +17,9 @@ gem 'tinymce-rails'
 gem 'tinymce-rails-langs'
 gem 'activeadmin_addons'
 gem "active_admin-sortable_tree"
+# gem 'active_admin-awesome_nested_set'
+#gem "active_admin-awesome_nested_set", :github => "art13/test_attr", :branch => "master"
+gem 'awesome_nested_set'
 #auth
 gem 'devise'
 gem 'devise_token_auth', :git => 'https://github.com/lynndylanhurley/devise_token_auth.git', :branch => 'master'
@@ -31,7 +34,7 @@ gem 'omniauth-twitter'
 group :assets do
   gem 'sass-rails'#,   '~> 3.2.3'
   gem 'coffee-rails'#, '~> 3.2.1'
-
+  gem 'jquery-ui-rails'
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer', :platforms => :ruby
 

@@ -90,6 +90,8 @@ GEM
     arbre (1.1.1)
       activesupport (>= 3.0.0)
     arel (7.1.2)
+    awesome_nested_set (3.1.1)
+      activerecord (>= 4.0.0, < 5.1)
     bcrypt (3.1.11)
     bourbon (4.2.7)
       sass (~> 3.4)
@@ -295,12 +297,14 @@ DEPENDENCIES
   active_admin-sortable_tree
   activeadmin!
   activeadmin_addons
+  awesome_nested_set
   capistrano
   coffee-rails
   devise
   devise_token_auth!
   inherited_resources!
   jquery-rails
+  jquery-ui-rails
   kaminari
   nokogiri
   omniauth

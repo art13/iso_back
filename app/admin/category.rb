@@ -6,16 +6,17 @@ ActiveAdmin.register Category do
 	# filter :parent
 	# filter :created_at
 	sortable tree: true,
-			sorting_attribute: :id,
+			sorting_attribute: :position,
 			collapsible: true,
 			start_collapsed: true,
-			roots_collection: proc { @categories.where(:parent_id => 0) } 
+			nested_set: true,
+			roots_collection: proc { @categories.where(:parent_id=> nil) } 
 	index :as => :sortable do
 	    label  :name# item content
 	    actions
 	end
+
 	# index do 
-	# 	selectable_column
 	# 	column :name
 	# 	column :permalink
 	# 	column :created_at
@@ -32,7 +33,8 @@ ActiveAdmin.register Category do
 		f.inputs do
 			 f.input :name
 			 f.input :parent, :as => :select, :collection =>  [""] + Category.all.map{|a| [a.name, a.id]} 
-			 f.input :site_permalink
+			 f.input :permalink
+			 f.input :show_on_front
 		end
 		f.actions
 	end 
@@ -42,6 +44,7 @@ ActiveAdmin.register Category do
 		 row :permalink
 		 row :created_at
 		 row :parent
+		 bool_row :show_on_front
 		end
 	end
 	controller do
