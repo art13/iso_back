@@ -1,5 +1,6 @@
 ActiveAdmin.register Category do
 	config.filters = false
+	permit_params :name, :site_permalink, :permalink, :parent_id, :parent
 	#filter :name
 	# filter :permalink
 	# filter :parent
@@ -8,9 +9,9 @@ ActiveAdmin.register Category do
 			sorting_attribute: :id,
 			collapsible: true,
 			start_collapsed: true,
-			roots_collection: proc { @categories.where(:parent_id => 0).first(2) } 
+			roots_collection: proc { @categories.where(:parent_id => 0) } 
 	index :as => :sortable do
-	    label  :product_name# item content
+	    label  :name# item content
 	    actions
 	end
 	# index do 
@@ -30,7 +31,7 @@ ActiveAdmin.register Category do
 	form do |f|
 		f.inputs do
 			 f.input :name
-			 f.input :parent, :as => :select
+			 f.input :parent, :as => :select, include_blank: true
 			 f.input :site_permalink
 		end
 		f.actions

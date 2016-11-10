@@ -14,5 +14,10 @@ module Api
 			render :json => {:per_page => params[:per_page].to_i, :current_page => params[:page].to_i,
 							 :max_count => max_count, :count_on_page => @count, :categories =>  @categories} 
 		end
+
+		def show 
+			@category = Category.find_by_id(params[:id]).as_json(:only => [:id, :parent_id, :name, :permalink])
+			render :json => {:category => @category}
+		end
 	end	
 end

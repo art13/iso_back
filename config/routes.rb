@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 	 	ActiveAdmin.routes(self)
 		#resources :products, :only => [:index, :show]
 		namespace :api do 
-			resources :categories, :only => [:index]
+			resources :categories, :only => [:index, :show]
 		  	resources :products, :only => [:index, :show]
 			# scope :v1 do 
 	 		mount_devise_token_auth_for 'Dealer', at: 'dealers'

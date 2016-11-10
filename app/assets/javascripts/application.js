@@ -13,3 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
+$("#e2").select2({
+    placeholder: "Select a State",
+    allowClear: true
+})
