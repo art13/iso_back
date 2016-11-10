@@ -9,7 +9,7 @@ ActiveAdmin.register Category do
 			sorting_attribute: :id,
 			collapsible: true,
 			start_collapsed: true,
-			roots_collection: proc { @categories.where(:parent_id => 0) } 
+			roots_collection: proc { @categories.where("parent_id =? or parent_id=?",  nil, 0) } 
 	index :as => :sortable do
 	    label  :name# item content
 	    actions

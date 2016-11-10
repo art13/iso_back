@@ -30,6 +30,7 @@ ActiveAdmin.register Product do
 		column :price
 		column :created_at
 		column :updated_at
+		column :admin_user
 		actions
 	end
 	form do |f|
