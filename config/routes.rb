@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-		match "*a", to: "errors#catch_404", via: :all
+		
 		devise_for :admin_users, ActiveAdmin::Devise.config
 	 	ActiveAdmin.routes(self)
 		#resources :products, :only => [:index, :show]
@@ -18,5 +18,5 @@ Rails.application.routes.draw do
 				# end
 			#end
 		end
-		
+		get '*path', to: "errors#catch_404", via: :all
 end
