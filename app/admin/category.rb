@@ -31,7 +31,7 @@ ActiveAdmin.register Category do
 	form do |f|
 		f.inputs do
 			 f.input :name
-			 f.input :parent, :as => :select, :collection => ["",""] << Category.all.map{|a| [a.name, a.id]} 
+			 f.input :parent, :as => :select, :collection =>  [""] + Category.all.map{|a| [a.name, a.id]} 
 			 f.input :site_permalink
 		end
 		f.actions
