@@ -7,3 +7,8 @@ $(document).ready ->
     theme: "modern"
     editor_selector: "tinymce"
   return
+$('document').ready ->
+  	$('.batch_action').on 'click', ->
+    	setTimeout (->
+      		$('#dialog_confirm select').select2()
+    	), 500

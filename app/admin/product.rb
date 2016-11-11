@@ -1,7 +1,8 @@
 ActiveAdmin.register Product do
-	batch_action :add_to_category, form: {
-	  I18n.t("category") =>  Category.order(:name).all.map{|t| [t.name, t.id]}	
-	}  do |ids, inputs|
+
+	batch_action :add_to_category, form: ->  {{
+		  I18n.t("category") => Category.all.map{|t| [t.name, t.id]}
+		} } do |ids, inputs|
 		add_to_category(params["batch_action_inputs"],params["collection_selection"] )
 	  #redirect_to collection_path
 	end
@@ -9,6 +10,7 @@ ActiveAdmin.register Product do
 	before_filter :only => [:show, :edit, :update, :destroy] do
         @product = Product.find_by_permalink(params[:id])
     end
+
     after_build do |product|
 		product.admin_user = current_admin_user
 	end 	
@@ -65,10 +67,22 @@ ActiveAdmin.register Product do
 		end
 	end
 	controller do 
+		def index 
+			super
+			@batch_categories = Category.order(:name).map{|t| [t.name, t.id]}	
+			#logger.debug @batch_categories
+		end
+
+		def update
+	      super do |format|
+	        redirect_to collection_url and return if resource.valid?
+	      end
+	    end
+
 		def add_to_category(category, product_ids)
 			category_id = ActiveSupport::JSON.decode(category)[t("category")].to_i
 			ids = product_ids.map{|a| a.to_i}
-			Product.where(:id => ids).update_all(:category_id => category_id, :updated_at => Time.current) 
+			Product.where(:id => ids).update_all(:category_id => category_id, :updated_at => Time.current, :admin_user_id  => current_admin_user.id) 
 			redirect_to admin_products_path, :notice => t("update_all_products")
 		end
 	end

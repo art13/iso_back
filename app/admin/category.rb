@@ -1,6 +1,6 @@
 ActiveAdmin.register Category do
 	config.filters = false
-	permit_params :name, :site_permalink, :permalink, :parent_id, :parent
+	permit_params :name, :site_permalink, :permalink, :parent_id, :parent, :show_on_front, :position#, :lft, :rgt
 	#filter :name
 	# filter :permalink
 	# filter :parent
@@ -9,8 +9,8 @@ ActiveAdmin.register Category do
 			sorting_attribute: :position,
 			collapsible: true,
 			start_collapsed: true,
-			nested_set: true,
-			roots_collection: proc { @categories.where(:parent_id=> nil) } 
+			#nested_set: true,
+			roots_collection: proc { @categories.where(:parent_id => nil) } 
 	index :as => :sortable do
 	    label  :name# item content
 	    actions
@@ -65,6 +65,17 @@ ActiveAdmin.register Category do
 
 	    def table_presenter?
 	      presenter_config[:as] == :table
+	    end
+	    # def create
+	    #   super do |format|
+	    #     redirect_to collection_url and return if resource.valid?
+	    #   end
+	    # end
+
+	    def update
+	      super do |format|
+	        redirect_to collection_url and return if resource.valid?
+	      end
 	    end
 	end
 end

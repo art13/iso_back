@@ -19,7 +19,7 @@ gem 'activeadmin_addons'
 gem "active_admin-sortable_tree"
 # gem 'active_admin-awesome_nested_set'
 #gem "active_admin-awesome_nested_set", :github => "art13/test_attr", :branch => "master"
-gem 'awesome_nested_set'
+#gem 'awesome_nested_set'
 #auth
 gem 'devise'
 gem 'devise_token_auth', :git => 'https://github.com/lynndylanhurley/devise_token_auth.git', :branch => 'master'

@@ -59,11 +59,9 @@ ActiveRecord::Schema.define(version: 20161110111051) do
     t.string   "image_content_type"
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
-    t.integer  "lft"
-    t.integer  "rgt"
-    t.boolean  "show_on_front",      default: true
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.boolean  "show_on_front",      default: false
     t.integer  "position"
   end
 
