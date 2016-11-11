@@ -67,12 +67,6 @@ ActiveAdmin.register Product do
 		end
 	end
 	controller do 
-		def index 
-			super
-			@batch_categories = Category.order(:name).map{|t| [t.name, t.id]}	
-			#logger.debug @batch_categories
-		end
-
 		def update
 	      super do |format|
 	        redirect_to collection_url and return if resource.valid?
