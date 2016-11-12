@@ -8,7 +8,7 @@ class Category < ActiveRecord::Base
 	has_many :products
 	
 	def product_name
-    	"#{self.name} (#{self.products.size})"	
+    	"#{self.name} #{'(0)' if self.products.empty?}"	
     end
     
 	private

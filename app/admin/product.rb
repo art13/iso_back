@@ -10,10 +10,15 @@ ActiveAdmin.register Product do
 	before_filter :only => [:show, :edit, :update, :destroy] do
         @product = Product.find_by_permalink(params[:id])
     end
-
     after_build do |product|
 		product.admin_user = current_admin_user
-	end 	
+	end
+	action_item :view, only: :index do
+	  link_to t("per_300"), "/admin/products?per_page=300"
+	end
+	action_item :view, only: :index do
+		link_to t("per_20"), admin_products_path
+	end
 	filter :name
 	filter :code
 	filter :price
@@ -67,6 +72,10 @@ ActiveAdmin.register Product do
 		end
 	end
 	controller do 
+		def index
+			super	
+		end
+
 		def update
 	      super do |format|
 	        redirect_to collection_url and return if resource.valid?

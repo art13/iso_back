@@ -12,7 +12,7 @@ ActiveAdmin.register Category do
 			#nested_set: true,
 			roots_collection: proc { @categories.where(:parent_id => nil) } 
 	index :as => :sortable do
-	    label  :name# item content
+	    label  :product_name# item content
 	    actions
 	end
 
