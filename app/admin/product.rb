@@ -1,5 +1,5 @@
 ActiveAdmin.register Product do
-
+	config.per_page = 300
 	batch_action :add_to_category, form: ->  {{
 		  I18n.t("category") => Category.all.map{|t| [t.name, t.id]}
 		} } do |ids, inputs|
@@ -13,12 +13,12 @@ ActiveAdmin.register Product do
     after_build do |product|
 		product.admin_user = current_admin_user
 	end
-	action_item :view, only: :index do
-	  link_to t("per_300"), "/admin/products?per_page=300"
-	end
-	action_item :view, only: :index do
-		link_to t("per_20"), admin_products_path
-	end
+	# action_item :view, only: :index do
+	#   link_to t("per_300"), "/admin/products?per_page=300"
+	# end
+	# action_item :view, only: :index do
+	# 	link_to t("per_30"), admin_products_path
+	# end
 	filter :name
 	filter :code
 	filter :price
@@ -77,8 +77,12 @@ ActiveAdmin.register Product do
 		end
 
 		def update
+		  per_page = 300
+		  id = @product.id
+		  position = Product.order("id DESC").where("id >= ?", id).count
+		  page = (position.to_f/per_page).ceil
 	      super do |format|
-	        redirect_to collection_url and return if resource.valid?
+	        redirect_to "/admin/products?page=#{page}" and return if resource.valid?
 	      end
 	    end
 
