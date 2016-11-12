@@ -1,7 +1,7 @@
 ru:
   category: Категория
   per_300: Показывать по 300
-  per_20: Показывать по 20
+  per_30: Показывать по 30
   update_all_products: Выделенные продукты обновлены
   activerecord:
     models:
