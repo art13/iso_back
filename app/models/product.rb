@@ -32,12 +32,16 @@ class Product < ActiveRecord::Base
 	def product_categories
 		categories = []
 		category = self.category
-		while category.parent_id > 0
+		if category
+			while category.parent_id.nil? || category.parent_id > 0 
+				categories << {:name => category.name, :permalink => category.permalink}
+				category = category.parent	
+			end		
 			categories << {:name => category.name, :permalink => category.permalink}
-			category = category.parent	
-		end		
-		categories << {:name => category.name, :permalink => category.permalink}
-		categories.reverse
+			categories.reverse
+		else 
+			[]
+		end
 	end
 
 	def rating
@@ -45,7 +49,7 @@ class Product < ActiveRecord::Base
 	end
 
 	def sample_products
-		(self.category.products.to_a - [self]).first(8).pluck(:id)
+		self.category ? (self.category.products.to_a - [self]).first(8).pluck(:id) : []
 	end
 
 	def comments
