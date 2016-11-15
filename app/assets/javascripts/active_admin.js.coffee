@@ -10,5 +10,7 @@ $(document).ready ->
 $('document').ready ->
   	$('.batch_action').on 'click', ->
     	setTimeout (->
-      		$('#dialog_confirm select').select2()
+      		$('#dialog_confirm select').select2({
+      	
+      		});
     	), 500

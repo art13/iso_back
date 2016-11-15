@@ -54,4 +54,12 @@ class Category < ActiveRecord::Base
 	def check_nil_parent
 		self.parent_id = nil if self.parent_id == 0 
 	end
+
+	def self.roots
+		where("shop_id=? OR shop_id=?", 0, 1).where(:parent_id=> nil)
+	end
+
+	def is_final_category
+		self.children.empty?	
+	end
 end

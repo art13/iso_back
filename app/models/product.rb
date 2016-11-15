@@ -33,7 +33,7 @@ class Product < ActiveRecord::Base
 		categories = []
 		category = self.category
 		if category
-			while category.parent_id.nil? #|| category.parent_id > 0 
+			while !category.parent_id.nil? #|| category.parent_id > 0 
 				categories << {:name => category.name, :permalink => category.permalink}
 				category = category.parent	
 			end		

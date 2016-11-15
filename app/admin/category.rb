@@ -10,9 +10,9 @@ ActiveAdmin.register Category do
 			collapsible: true,
 			start_collapsed: true,
 			#nested_set: true,
-			roots_collection: proc { @categories.where(:parent_id => nil) } 
+			roots_collection: proc { @categories.roots } 
 	index :as => :sortable do
-	    label  :product_name# item content
+	    label  :name# item content
 	    actions
 	end
 
