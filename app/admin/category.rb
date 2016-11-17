@@ -1,6 +1,11 @@
 ActiveAdmin.register Category do
 	config.filters = false
 	permit_params :name, :site_permalink, :permalink, :parent_id, :parent, :show_on_front, :position#, :lft, :rgt
+	batch_action :in_to_category, form: ->  {{
+		  I18n.t("category") => Category.all.map{|t| [t.name, t.id]}
+		} } do |ids, inputs|
+		in_to_category(params["batch_action_inputs"],params["collection_selection"] )
+	end
 	#filter :name
 	# filter :permalink
 	# filter :parent
@@ -76,6 +81,17 @@ ActiveAdmin.register Category do
 	      super do |format|
 	        redirect_to collection_url and return if resource.valid?
 	      end
+	    end
+
+	    def in_to_category(category, ids)
+	    	category_id = ActiveSupport::JSON.decode(category)[t("category")].to_i
+	    	ids = ids.map{|i| i.to_i}
+	    	@category = Category.find_by_id(category_id)
+	    	Category.where(:id => ids).each do |category|
+	    		category.products.update_all(:category_id => @category.id, :updated_at => Time.current, :admin_user_id  => current_admin_user.id)
+	    		category.destroy if category != @category
+	    	end
+	    	redirect_to admin_categories_path, :notice => t("categories_shared_suc")
 	    end
 	end
 end

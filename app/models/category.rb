@@ -1,5 +1,6 @@
 class Category < ActiveRecord::Base
 	#acts_as_nested_set
+	default_scope { order(position: :asc) }
 	before_validation :get_position
 	before_validation :generate_permalink
 	belongs_to :parent, :class_name => "Category"

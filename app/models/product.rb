@@ -1,5 +1,5 @@
 class Product < ActiveRecord::Base
-
+	#default_scope { order(created_at: :desc) }
 	before_destroy :destroy_photo
 	belongs_to :product_update
 	belongs_to :category
@@ -26,7 +26,12 @@ class Product < ActiveRecord::Base
     # end
    
     def product_properties
-    	self.properties
+    	i = 0
+    	begin
+    		self.properties.map{|k, v| {"key" => k, "val" => v, "position" => i+=1}}
+    	rescue
+    		ActiveSupport::JSON.decode(self.properties).map{|k| {"key" => k['key'], "val" => k['val'], "position" => i+=1}}
+    	end
     end
 	
 	def product_categories
@@ -94,7 +99,8 @@ class Product < ActiveRecord::Base
 	end
 
 	private
-		def destroy_photo
-		   	self.photo.destroy if self.photo
-		end
+		
+	def destroy_photo
+		self.photo.destroy if self.photo
+	end
 end

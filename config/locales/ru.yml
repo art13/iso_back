@@ -3,6 +3,7 @@ ru:
   per_300: Показывать по 300
   per_30: Показывать по 30
   update_all_products: Выделенные продукты обновлены
+  categories_shared_suc: Категории объединены
   activerecord:
     models:
       admin_user:
@@ -153,6 +154,7 @@ ru:
       action_label: "%{title}"
       input_label: "%{title}"
       labels:
+        in_to_category: Объединить категории
         add_to_category: Изменить категорию
         destroy: "Удалить"
         category: Категория

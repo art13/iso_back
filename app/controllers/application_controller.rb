@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   	protect_from_forgery with: :null_session
-	before_filter :configure_permitted_parameters, if: :devise_controller?
+	before_action :configure_permitted_parameters, if: :devise_controller?
 	rescue_from ActionController::RoutingError do |exception|
 	    render json: {:error => exception, status: 404}
 	end

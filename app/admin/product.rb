@@ -7,7 +7,7 @@ ActiveAdmin.register Product do
 	  #redirect_to collection_path
 	end
 	permit_params :name, :price, :code, :description, :permalink, :category_id, :admin_user_id
-	before_filter :only => [:show, :edit, :update, :destroy] do
+	before_action :only => [:show, :edit, :update, :destroy] do
         @product = Product.find_by_permalink(params[:id])
     end
     after_build do |product|
@@ -38,7 +38,7 @@ ActiveAdmin.register Product do
 		column :category
 		column :price
 		column :created_at
-		column :updated_at
+		column :updated_at, sortable: true
 		column :admin_user
 		actions
 	end
