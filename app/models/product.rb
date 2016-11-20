@@ -1,5 +1,5 @@
 class Product < ActiveRecord::Base
-	#default_scope { order(created_at: :desc) }
+	# default_scope { order(created_at: :desc) }
 	before_destroy :destroy_photo
 	belongs_to :product_update
 	belongs_to :category
@@ -36,11 +36,12 @@ class Product < ActiveRecord::Base
 	
 	def product_categories
 		categories = []
-		category = self.category
+		@categories = Category.all.to_a
+		category = @categories.detect{|w| w.id == self.category_id}
 		if category
 			while !category.parent_id.nil? #|| category.parent_id > 0 
 				categories << {:name => category.name, :permalink => category.permalink}
-				category = category.parent	
+				category = @categories.detect{|w| w.id == category.parent_id}	
 			end		
 			categories << {:name => category.name, :permalink => category.permalink}
 			categories.reverse

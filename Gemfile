@@ -15,7 +15,7 @@ gem 'inherited_resources', github: 'activeadmin/inherited_resources'
 gem 'activeadmin', github: 'activeadmin'
 gem 'tinymce-rails'
 gem 'tinymce-rails-langs'
-gem 'activeadmin_addons'
+gem 'activeadmin_addons'	
 gem "active_admin-sortable_tree"
 # gem 'active_admin-awesome_nested_set'
 #gem "active_admin-awesome_nested_set", :github => "art13/test_attr", :branch => "master"
@@ -27,7 +27,7 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-twitter'
-
+gem 'omniauth-vkontakte'
 
 # Gems used only for assets and not required
 # in production environments by default.

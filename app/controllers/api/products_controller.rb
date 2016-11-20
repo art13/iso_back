@@ -10,19 +10,11 @@ module Api
 			end if params[:props_lt].present?
 			params[:props_gt].to_a.each do |prop|
 				@product_s = @product_s.props_gt(prop[0], prop[1])
-			end if params[:props_gt].present?
-			if params[:price_lt] || params[:price_gt]
-				@product_s = @product_s.price_btw(params[:price_gt], params[:price_lt])
-			end
-			@products = 
-			if params[:in_category]
-				pr_s = asjson_filter(@product_s.where(:category_id => params[:in_category].to_i))
-				Kaminari.paginate_array(pr_s).page(params[:page]).per(params[:per_page])
-			else
-				asjson( params[:page].to_i > 1 ? @product_s.order("id ASC").where("id > ?", params[:per_page].to_i*params[:page].to_i).limit(params[:per_page].to_i) : @product_s.first(params[:per_page].to_i))
-			end
+			end if params[:props_gt].present?	
+			@product_s = @product_s.price_btw(params[:price_gt], params[:price_lt]) if params[:price_lt] || params[:price_gt]
+			@product_s = @product_s.where(:category_id => params[:in_category].to_i) if params[:in_category]
+			@products = asjson(@product_s.order("id ASC").page(params[:page]).per(params[:per_page]))
 			max_count = @product_s.all.size
-			# products = Kaminari.paginate_array(@products).page(params[:page]).per(params[:per_page])
 			@count = @products.size
 			render :json => {:per_page => params[:per_page].to_i, :current_page => params[:page].to_i,
 							 :max_count => max_count, :count_on_page => @count, :products =>  @products} 
@@ -40,13 +32,8 @@ module Api
 		end
 
 		def asjson(product)
-			product.as_json(:only => [:id, :category_id, :permalink, :name, :price, :code, :updated_at], :methods => [:photo_url, :product_properties, :rating])
+			product.as_json(:only => [:id, :category_id, :permalink, :name, :price, :code, :updated_at], :methods => [:photo_url, :product_properties, :product_categories, :rating])
 		end
-
-		def asjson_filter(product)
-			product.as_json(:only => [:id, :name, :permalink, :name, :price, :code, :updated_at], :methods => [:photo_url, :product_categories, :rating])
-		end
-
 	end
 
 end
