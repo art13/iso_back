@@ -1,5 +1,6 @@
 module Api
 	class CategoriesController < ApplicationController
+		before_action :check_categories
 		def index
 			params[:per_page] ||= 100
 			params[:page] ||= 1
@@ -14,6 +15,7 @@ module Api
 		end
 
 		def show 
+			
 			@category =  
 				case params[:id].to_i > 0
 				when true
@@ -22,6 +24,10 @@ module Api
 					Category.find_by_permalink(params[:id])
 				end
 			render :json => @category.as_json(:only => [:id, :parent_id, :name, :permalink, :position], :methods => [:is_final_category, :product_categories])
+		end
+
+		def check_categories
+			Category.prod_props = Category.all
 		end
 	end	
 end

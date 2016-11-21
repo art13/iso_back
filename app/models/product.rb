@@ -1,8 +1,10 @@
 class Product < ActiveRecord::Base
+	cattr_accessor :prod_props
 	# default_scope { order(created_at: :desc) }
 	before_destroy :destroy_photo
 	belongs_to :product_update
 	belongs_to :category
+	has_many :taxon_products
 	belongs_to :admin_user
 	# has_many :ratings, dependent: :destroy
 	# has_many :comments, dependent: :destroy
@@ -36,7 +38,7 @@ class Product < ActiveRecord::Base
 	
 	def product_categories
 		categories = []
-		@categories = Category.all.to_a
+		@categories = self.prod_props.to_a
 		category = @categories.detect{|w| w.id == self.category_id}
 		if category
 			while !category.parent_id.nil? #|| category.parent_id > 0 

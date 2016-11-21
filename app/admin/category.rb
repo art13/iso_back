@@ -6,16 +6,12 @@ ActiveAdmin.register Category do
 		} } do |ids, inputs|
 		in_to_category(params["batch_action_inputs"],params["collection_selection"] )
 	end
-	#filter :name
-	# filter :permalink
-	# filter :parent
-	# filter :created_at
 	sortable tree: true,
 			sorting_attribute: :position,
 			collapsible: true,
 			start_collapsed: true,
 			#nested_set: true,
-			roots_collection: proc { @categories.roots } 
+			roots_collection: proc { @categories.root_all } 
 	index :as => :sortable do
 	    label  :name# item content
 	    actions

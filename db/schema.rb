@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161110111051) do
+ActiveRecord::Schema.define(version: 20161121125211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -161,6 +161,34 @@ ActiveRecord::Schema.define(version: 20161110111051) do
     t.integer  "admin_user_id"
     t.index ["permalink"], name: "index_products_on_permalink", using: :btree
     t.index ["properties"], name: "index_products_on_properties", using: :btree
+  end
+
+  create_table "taxon_products", force: :cascade do |t|
+    t.integer "product_id"
+    t.integer "taxon_id"
+    t.index ["product_id"], name: "index_taxon_products_on_product_id", using: :btree
+    t.index ["taxon_id"], name: "index_taxon_products_on_taxon_id", using: :btree
+  end
+
+  create_table "taxons", force: :cascade do |t|
+    t.string   "name",               default: ""
+    t.integer  "shop_id",            default: 0
+    t.integer  "parent_id",          default: 0
+    t.string   "url",                default: ""
+    t.string   "permalink",          default: ""
+    t.string   "site_permalink",     default: ""
+    t.string   "icon_type",          default: ""
+    t.string   "time_id"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
+    t.boolean  "show_on_front",      default: false
+    t.integer  "position"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.index ["permalink"], name: "index_taxons_on_permalink", using: :btree
+    t.index ["position"], name: "index_taxons_on_position", using: :btree
   end
 
 end

@@ -5,4 +5,10 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-AdminUser.create!(email: 'admin@example.com', password: 'password', password_confirmation: 'password')
+AdminUser.create(email: 'admin@example.com', password: 'password', password_confirmation: 'password') if AdminUser.all.empty?
+Category.order("position ASC").each do |category|
+	x = category.attributes
+	x.delete("id")
+	puts "#{x}"
+	Taxon.create(x)
+end

@@ -1,14 +1,10 @@
-class Category < ActiveRecord::Base
-	#acts_as_nested_set
-	cattr_accessor :prod_props
-	default_scope { order(position: :asc) }
+class Taxon < ActiveRecord::Base
+	has_many :taxon_products
 	before_validation :get_position
 	before_validation :generate_permalink
-	belongs_to :parent, :class_name => "Category"
+	belongs_to :parent, :class_name => "Taxon"
 	before_validation :check_nil_parent
-	has_many :children, :foreign_key => "parent_id", :class_name => "Category"
-	has_many :products
-	
+	has_many :children, :foreign_key => "parent_id", :class_name => "Taxon"
 	def product_name
     	"#{self.name} #{'(0)' if self.products.empty?}"	
     end
@@ -17,10 +13,10 @@ class Category < ActiveRecord::Base
 
 	def generate_permalink
 			site_permalink = self.permalink.split("/").last
-		  	cat = Category.find_by_permalink(site_permalink)
+		  	cat = Taxon.find_by_permalink(site_permalink)
 		  	if cat && cat.id != self.id
 		    	n = 1
-		    	while Category.find_by_permalink("#{site_permalink}-#{n}")
+		    	while Taxon.find_by_permalink("#{site_permalink}-#{n}")
 		     		n += 1
 		    	end
 		    	self.permalink = "#{site_permalink}-#{n}"
@@ -31,14 +27,14 @@ class Category < ActiveRecord::Base
 	
 	def product_categories
 		categories = []
-		@categories = prod_props.to_a
-		category = @categories.detect{|w| w.id == self.id}
-		if category
-			while !category.parent_id.nil? #|| category.parent_id > 0 
-				categories << {:name => category.name, :permalink => category.permalink}
-				category = @categories.detect{|w| w.id == category.parent_id}	
+		@categories = Taxon.all.to_a
+		taxon = @categories.detect{|w| w.id == self.id}
+		if taxon
+			while !taxon.parent_id.nil? #|| Taxon.parent_id > 0 
+				categories << {:name => taxon.name, :permalink => taxon.permalink}
+				taxon = @categories.detect{|w| w.id == taxon.parent_id}	
 			end		
-			categories << {:name => category.name, :permalink => category.permalink}
+			categories << {:name => taxon.name, :permalink => taxon.permalink}
 			categories.reverse
 		else 
 			[]
@@ -46,11 +42,11 @@ class Category < ActiveRecord::Base
 	end
 
 	def self.isolux
-		scope = Category.where(:shop_id => 1)
+		scope = Taxon.where(:shop_id => 1)
 	end
 
 	def self.instr
-		scope = Category.where(:shop_id => 2)
+		scope = Taxon.where(:shop_id => 2)
 	end
 
 	def self.get_parents
@@ -76,8 +72,8 @@ class Category < ActiveRecord::Base
 	def self.root_all
 		where(:parent_id=> nil)
 	end
-
-	def is_final_category
+	
+	def is_final_Taxon
 		self.children.empty?	
 	end
 end
