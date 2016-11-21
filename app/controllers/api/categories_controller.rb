@@ -7,8 +7,6 @@ module Api
 			@category = @category.get_parents if params[:only_head_categories]
 			@category = @category.get_children(params[:get_children]) if params[:get_children]
 			max_count = @category.all.size
-
-
 			@categories = @category.page(params[:page]).per(params[:per_page]).as_json(:only => [:id, :parent_id, :name, :permalink, :position], :methods => :is_final_category)
 			@count = @categories.size
 			render :json => {:per_page => params[:per_page].to_i, :current_page => params[:page].to_i,
@@ -16,8 +14,14 @@ module Api
 		end
 
 		def show 
-			@category = Category.find_by_id(params[:id]).as_json(:only => [:id, :parent_id, :name, :permalink, :position], :methods => :is_final_category)
-			render :json => {:category => @category}
+			@category =  
+				case params[:id].to_i > 0
+				when true
+					Category.find_by_id(params[:id])
+				when false
+					Category.find_by_permalink(params[:id])
+				end
+			render :json => @category.as_json(:only => [:id, :parent_id, :name, :permalink, :position], :methods => [:is_final_category, :product_categories])
 		end
 	end	
 end

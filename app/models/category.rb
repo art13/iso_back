@@ -15,9 +15,6 @@ class Category < ActiveRecord::Base
 	private
 
 	def generate_permalink
-		# if params[:site_permalink]
-		
-		# else
 			site_permalink = self.permalink.split("/").last
 		  	cat = Category.find_by_permalink(site_permalink)
 		  	if cat && cat.id != self.id
@@ -29,7 +26,21 @@ class Category < ActiveRecord::Base
 		  	else
 		    	self.permalink = site_permalink
 		  	end
-		# end
+	end
+	def product_categories
+		categories = []
+		@categories = Category.all.to_a
+		category = @categories.detect{|w| w.id == self.id}
+		if category
+			while !category.parent_id.nil? #|| category.parent_id > 0 
+				categories << {:name => category.name, :permalink => category.permalink}
+				category = @categories.detect{|w| w.id == category.parent_id}	
+			end		
+			categories << {:name => category.name, :permalink => category.permalink}
+			categories.reverse
+		else 
+			[]
+		end
 	end
 
 	def self.isolux
