@@ -35,7 +35,7 @@ ActiveAdmin.register Taxon do
 		end
 	end
 	controller do
-	    before_filter only: :index do
+	    before_action only: :index do
 	      if table_presenter?
 	        active_admin_config.paginate = true
 	        active_admin_config.filters  = true

@@ -2,6 +2,7 @@ class Category < ActiveRecord::Base
 	#acts_as_nested_set
 	cattr_accessor :prod_props
 	default_scope { order(position: :asc) }
+	# before_destroy :delete_from_products
 	before_validation :get_position
 	before_validation :generate_permalink
 	belongs_to :parent, :class_name => "Category"
@@ -80,4 +81,7 @@ class Category < ActiveRecord::Base
 	def is_final_category
 		self.children.empty?	
 	end
+	# def delete_from_products
+	# 	self.
+	# end
 end
