@@ -10,13 +10,14 @@ class Product < ActiveRecord::Base
 	# has_many :comments, dependent: :destroy
 	has_many :images, dependent: :destroy
 	has_attached_file :photo,
-		url: '/products/:id/:style/:basename.:extension',
+		url: "/products/:id/:style/:basename.:extension",
 	    path: ':rails_root/public/products/:id/:style/:basename.:extension',
 	    default_url: '/assets/no_image.svg'
     validates_attachment_content_type :photo, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif"]
 
     def photo_url
-    	self.photo.url.split("?").first
+    	#id = self.photo.url.split('/original').first.split('/').last
+    	self.photo.url.split('?').first
     end
 
     def to_param
@@ -99,6 +100,10 @@ class Product < ActiveRecord::Base
 		min = 0 if min.nil?
 		max = 1000000 if max.nil?
 		where("price BETWEEN '#{min}' AND '#{max}' ")
+	end
+	
+	def id
+		self[:id].to_s.rjust(6, '0')
 	end
 
 	private

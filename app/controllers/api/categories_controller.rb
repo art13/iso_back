@@ -4,7 +4,7 @@ module Api
 		def index
 			params[:per_page] ||= 100
 			params[:page] ||= 1
-			@category = Category
+			@category = Category#.where(:show_on_front => true)
 			@category = @category.get_parents if params[:only_head_categories]
 			@category = @category.get_children(params[:get_children]) if params[:get_children]
 			max_count = @category.all.size
@@ -27,7 +27,7 @@ module Api
 		end
 
 		def check_categories
-			Category.prod_props = Category.all
+			Category.prod_props = Category.where(:show_on_front => true)
 		end
 	end	
 end
