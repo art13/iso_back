@@ -10,6 +10,7 @@ gem 'unirest'
 gem 'paperclip'
 gem 'nokogiri'
 gem 'kaminari'
+gem 'stringex'
 #admin
 gem 'inherited_resources', github: 'activeadmin/inherited_resources'
 gem 'activeadmin', github: 'activeadmin'

@@ -34,7 +34,7 @@ ActiveAdmin.register Category do
 		f.inputs do
 			 f.input :name
 			 f.input :parent, :as => :select, :collection =>  [""] + Category.all.map{|a| [a.name, a.id]} 
-			 f.input :permalink
+			 #f.input :permalink
 			 f.input :show_on_front
 		end
 		f.actions

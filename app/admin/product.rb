@@ -6,7 +6,7 @@ ActiveAdmin.register Product do
 		add_to_category(params["batch_action_inputs"],params["collection_selection"] )
 	  #redirect_to collection_path
 	end
-	permit_params :name, :price, :code, :description, :permalink, :category_id, :admin_user_id
+	permit_params :name,:photo, :price, :code, :description, :permalink, :category_id, :admin_user_id
 	before_action :only => [:show, :edit, :update, :destroy] do
         @product = Product.find_by_permalink(params[:id])
     end

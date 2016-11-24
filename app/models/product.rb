@@ -101,11 +101,11 @@ class Product < ActiveRecord::Base
 		max = 1000000 if max.nil?
 		where("price BETWEEN '#{min}' AND '#{max}' ")
 	end
-	
+
 	def id
 		self[:id].to_s.rjust(6, '0')
 	end
-
+	
 	private
 		
 	def destroy_photo

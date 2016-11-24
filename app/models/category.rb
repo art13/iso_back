@@ -14,18 +14,22 @@ class Category < ActiveRecord::Base
 	def product_name
     	"#{self.name} #{'(0)' if self.products.empty?}"	
     end
-    
+
+    def gen_url
+		I18n.transliterate(self.name).to_url.gsub("-","_")	
+	end
+	
 	private
 
 	def generate_permalink
-			site_permalink = self.permalink.split("/").last
+			site_permalink = self.gen_url
 		  	cat = Category.find_by_permalink(site_permalink)
 		  	if cat && cat.id != self.id
 		    	n = 1
-		    	while Category.find_by_permalink("#{site_permalink}-#{n}")
+		    	while Category.find_by_permalink("#{site_permalink}_#{n}")
 		     		n += 1
 		    	end
-		    	self.permalink = "#{site_permalink}-#{n}"
+		    	self.permalink = "#{site_permalink}_#{n}"
 		  	else
 		    	self.permalink = site_permalink
 		  	end
