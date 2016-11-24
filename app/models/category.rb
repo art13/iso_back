@@ -2,6 +2,7 @@ class Category < ActiveRecord::Base
 	#acts_as_nested_set
 	cattr_accessor :prod_props
 	default_scope { order(position: :asc) }
+	after_save :client_show
 	# before_destroy :delete_from_products
 	before_validation :get_position
 	before_validation :generate_permalink
@@ -81,7 +82,17 @@ class Category < ActiveRecord::Base
 	def is_final_category
 		self.children.empty?	
 	end
-	# def delete_from_products
-	# 	self.
-	# end
+
+	def client_show
+		categories = Category.all.to_a
+		results_ids = []
+		@second_level = []
+			parent = categories.detect{|w| w.id == self.id}
+			@first_level = categories.select{|w| w.parent_id == parent.id}
+			@first_level.each do |first_level_parent|
+				@second_level += categories.select{|w| w.parent_id == first_level_parent.id}
+			end 
+			results_ids = @first_level.pluck(:id) + @second_level.pluck(:id)  
+		Category.where(:id => results_ids).update_all(:show_on_front => self.show_on_front)
+	end
 end

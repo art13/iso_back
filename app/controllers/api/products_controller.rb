@@ -3,7 +3,7 @@ module Api
 		def index
 			params[:per_page] ||= "100"
 			params[:page] ||= "1"
-			Product.prod_props = Category.all#where(:show_on_front => true)
+			Product.prod_props = Category.where(:show_on_front => true)
 			@product_s = Product.joins(:category).where(:categories => {:show_on_front => true})
 			@product_s = in_category(Product.prod_props, check_params(Category, params[:in_category])) if params[:in_category]
 			@product_s = @product_s.search_by_props(params[:prop_eq]) if params[:prop_eq]
@@ -22,7 +22,7 @@ module Api
 		end
 
 		def show
-			Product.prod_props = Category.all#where(:show_on_front => true)
+			Product.prod_props = Category.where(:show_on_front => true)
 			product = check_params(Product, params[:id])
 			render :json => product.as_json(:only => [ :category_id, :permalink, :name, :price, :code, :description, :updated_at], :methods => [:rating, :photo_url, :product_properties, :sample_products, :product_categories, :comments, :more_images]) 
 		end
