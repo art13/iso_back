@@ -4,6 +4,7 @@ class Product < ActiveRecord::Base
 	before_destroy :destroy_photo
 	belongs_to :product_update
 	belongs_to :category
+	has_many :line_item
 	has_many :taxon_products
 	belongs_to :admin_user
 	# has_many :ratings, dependent: :destroy

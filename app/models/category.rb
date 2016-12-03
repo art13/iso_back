@@ -1,5 +1,4 @@
 class Category < ActiveRecord::Base
-	#acts_as_nested_set
 	cattr_accessor :prod_props
 	default_scope { order(position: :asc) }
 	after_save :client_show
@@ -12,13 +11,13 @@ class Category < ActiveRecord::Base
 	has_many :products
 	
 	def product_name
-    	"#{self.name} #{'(0)' if self.products.empty?}"	
+    	"#{self.name}"
     end
 
     def gen_url
 		I18n.transliterate(self.name).to_url.gsub("-","_")	
 	end
-	
+
 	private
 
 	def generate_permalink
@@ -84,11 +83,12 @@ class Category < ActiveRecord::Base
 	end
 
 	def is_final_category
-		self.children.empty?	
+		categories = Category.prod_props.to_a
+		categories.detect{|w| w.parent_id == self.id}.nil?
 	end
 
 	def client_show
-		categories = Category.all.to_a
+		categories = Category.prod_props.to_a
 		results_ids = []
 		@second_level = []
 			parent = categories.detect{|w| w.id == self.id}

@@ -6,6 +6,8 @@ Rails.application.routes.draw do
 		namespace :api do 
 			resources :categories, :only => [:index, :show]
 		  	resources :products, :only => [:index, :show]
+		  	resources :line_items, :only => [:index, :show]
+		  	resources :orders, :only => [:create, :show]
 			# scope :v1 do 
 	 		mount_devise_token_auth_for 'Dealer', at: 'dealers'
 	  		mount_devise_token_auth_for 'Customer', at: 'customers'

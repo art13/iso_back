@@ -1,6 +1,6 @@
 module Api
 	class CategoriesController < ApplicationController
-		#before_action :check_categories
+		before_action :check_categories
 		def index
 			params[:per_page] ||= 100
 			params[:page] ||= 1
